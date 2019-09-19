@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="ZHBGProcess" name="账号变更流程" isExecutable="true">
+    <startEvent id="ZHBGPStart" name="账号变更流程启动"></startEvent>
+    <userTask id="ZHBGPqgssqbmldsp" name="区公司申请部门领导审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow1" sourceRef="ZHBGPStart" targetRef="ZHBGPqgssqbmldsp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPqgssqbmldsp'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPfgssqbmld" name="分公司申请部门领导审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow2" sourceRef="ZHBGPStart" targetRef="ZHBGPfgssqbmld">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPfgssqbmld'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPqgsscbsp" name="区公司市场部(政企部)审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow3" sourceRef="ZHBGPqgssqbmldsp" targetRef="ZHBGPqgsscbsp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPqgsscbsp'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPqgszhglyfpzh" name="账号管理员分配账号">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow4" sourceRef="ZHBGPqgssqbmldsp" targetRef="ZHBGPqgszhglyfpzh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPqgszhglyfpzh'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPfgsscbsp" name="分公司市场部审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow5" sourceRef="ZHBGPfgssqbmld" targetRef="ZHBGPfgsscbsp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPfgsscbsp'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPfgszhglyfpzh" name="账号管理员分配账号">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow6" sourceRef="ZHBGPfgsscbsp" targetRef="ZHBGPfgszhglyfpzh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPfgszhglyfpzh'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPsqrjsfk" name="申请人接收结果反馈">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow7" sourceRef="ZHBGPqgsyzzhglyfpzh" targetRef="ZHBGPsqrjsfk"></sequenceFlow>
+    <endEvent id="ZHBGPEnd" name="账号变更流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endZHBGProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow8" sourceRef="ZHBGPsqrjsfk" targetRef="ZHBGPEnd"></sequenceFlow>
+    <userTask id="ZHBGPywzczxsp" name="业务支撑中心审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow11" sourceRef="ZHBGPqgsscbsp" targetRef="ZHBGPywzczxsp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPywzczxsp'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPqgsyzzhglyfpzh" name="账号管理员分配账号">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow12" sourceRef="ZHBGPywzczxsp" targetRef="ZHBGPqgsyzzhglyfpzh">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPqgsyzzhglyfpzh'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="ZHBGPAppChg" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createZHBGProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeZHBGProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+	</userTask>
+    <sequenceFlow id="flow15" sourceRef="ZHBGPfgssqbmld" targetRef="ZHBGPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="ZHBGPfgsscbsp" targetRef="ZHBGPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="ZHBGPqgssqbmldsp" targetRef="ZHBGPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow18" sourceRef="ZHBGPqgsscbsp" targetRef="ZHBGPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="ZHBGPywzczxsp" targetRef="ZHBGPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="ZHBGPAppChg" targetRef="ZHBGPqgssqbmldsp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPqgssqbmldsp'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="ZHBGPAppChg" targetRef="ZHBGPfgssqbmld">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPfgssqbmld'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="ZHBGPfgszhglyfpzh" targetRef="ZHBGPsqrjsfk"></sequenceFlow>
+    <sequenceFlow id="flow23" sourceRef="ZHBGPqgszhglyfpzh" targetRef="ZHBGPsqrjsfk"></sequenceFlow>
+    <endEvent id="ZHBGPAppChgEnd" name="申请人终止">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endZHBGProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow24" sourceRef="ZHBGPAppChg" targetRef="ZHBGPAppChgEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='ZHBGPAppChgEnd'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ZHBGProcess">
+    <bpmndi:BPMNPlane bpmnElement="ZHBGProcess" id="BPMNPlane_ZHBGProcess">
+      <bpmndi:BPMNShape bpmnElement="ZHBGPStart" id="BPMNShape_ZHBGPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="151.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPqgssqbmldsp" id="BPMNShape_ZHBGPqgssqbmldsp">
+        <omgdc:Bounds height="55.0" width="105.0" x="116.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPfgssqbmld" id="BPMNShape_ZHBGPfgssqbmld">
+        <omgdc:Bounds height="55.0" width="105.0" x="116.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPqgsscbsp" id="BPMNShape_ZHBGPqgsscbsp">
+        <omgdc:Bounds height="55.0" width="105.0" x="297.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPqgszhglyfpzh" id="BPMNShape_ZHBGPqgszhglyfpzh">
+        <omgdc:Bounds height="55.0" width="105.0" x="640.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPfgsscbsp" id="BPMNShape_ZHBGPfgsscbsp">
+        <omgdc:Bounds height="55.0" width="105.0" x="297.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPfgszhglyfpzh" id="BPMNShape_ZHBGPfgszhglyfpzh">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPsqrjsfk" id="BPMNShape_ZHBGPsqrjsfk">
+        <omgdc:Bounds height="55.0" width="105.0" x="640.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPEnd" id="BPMNShape_ZHBGPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="675.0" y="390.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPywzczxsp" id="BPMNShape_ZHBGPywzczxsp">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPqgsyzzhglyfpzh" id="BPMNShape_ZHBGPqgsyzzhglyfpzh">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPAppChg" id="BPMNShape_ZHBGPAppChg">
+        <omgdc:Bounds height="55.0" width="105.0" x="297.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ZHBGPAppChgEnd" id="BPMNShape_ZHBGPAppChgEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="436.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="168.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="168.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="168.0" y="300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="168.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="221.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="297.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="168.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="167.0" y="94.0"></omgdi:waypoint>
+        <omgdi:waypoint x="693.0" y="94.0"></omgdi:waypoint>
+        <omgdi:waypoint x="692.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="221.0" y="407.0"></omgdi:waypoint>
+        <omgdi:waypoint x="297.0" y="407.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="402.0" y="407.0"></omgdi:waypoint>
+        <omgdi:waypoint x="402.0" y="407.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="349.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="692.0" y="305.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="692.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="692.0" y="390.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="402.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="522.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="168.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="305.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="349.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="305.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="168.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="349.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="522.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="349.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="297.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="222.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="168.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="349.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="207.0" y="318.0"></omgdi:waypoint>
+        <omgdi:waypoint x="168.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="349.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="692.0" y="305.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="692.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="692.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="349.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="453.0" y="330.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

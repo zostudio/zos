@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="PrimaryProcess" name="主流程" isExecutable="true">
+    <startEvent id="PPStart" name="主流程开始"></startEvent>
+    <userTask id="PPThermoCompressor" name="热压机">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createPrimaryProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deletePrimaryProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="PPStart" targetRef="PPThermoCompressor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPThermoCompressor'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="PPSaw" name="锯板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createPrimaryProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deletePrimaryProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="PPThermoCompressor" targetRef="PPSaw">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPSaw'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="PPDirector" name="主任">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createPrimaryProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deletePrimaryProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="PPSaw" targetRef="PPDirector">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPDirector'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="PPThermoCompressor" targetRef="PPDirector">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPDirector'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="PPDirector" targetRef="PPThermoCompressor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPThermoCompressor'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="PPRepair" name="修板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createPrimaryProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deletePrimaryProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="PPDirector" targetRef="PPRepair">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPRepair'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="PPEnd" name="主流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endPrimaryProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow7" sourceRef="PPRepair" targetRef="PPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="PPDirector" targetRef="PPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='PPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PrimaryProcess">
+    <bpmndi:BPMNPlane bpmnElement="PrimaryProcess" id="BPMNPlane_PrimaryProcess">
+      <bpmndi:BPMNShape bpmnElement="PPStart" id="BPMNShape_PPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PPThermoCompressor" id="BPMNShape_PPThermoCompressor">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PPSaw" id="BPMNShape_PPSaw">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PPDirector" id="BPMNShape_PPDirector">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PPRepair" id="BPMNShape_PPRepair">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PPEnd" id="BPMNShape_PPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="515.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="135.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="285.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="382.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="75.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="232.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="382.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="435.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="532.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="382.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

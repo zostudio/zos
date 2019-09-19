@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="SalaryProcess" name="薪酬流程" isExecutable="true">
+    <startEvent id="SPStart" name="薪酬流程开始"></startEvent>
+    <endEvent id="SPEnd" name="薪酬流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endSalaryProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="SPSalary" name="薪酬">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSalaryProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteSalaryProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="SPStart" targetRef="SPSalary">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SPSalary'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="SPSalary" targetRef="SPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_SalaryProcess">
+    <bpmndi:BPMNPlane bpmnElement="SalaryProcess" id="BPMNPlane_SalaryProcess">
+      <bpmndi:BPMNShape bpmnElement="SPStart" id="BPMNShape_SPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="93.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SPEnd" id="BPMNShape_SPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="335.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SPSalary" id="BPMNShape_SPSalary">
+        <omgdc:Bounds height="55.0" width="105.0" x="181.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="128.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="181.0" y="87.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="286.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="335.0" y="87.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

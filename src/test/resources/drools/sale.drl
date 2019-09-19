@@ -1,0 +1,31 @@
+//created on: 2019-8-29
+package com.zos.activiti.drools;
+
+//list any import classes here.
+import com.zos.activiti.drools.Member;
+
+
+//declare any global variables here
+
+
+
+
+rule "gold"
+
+    when
+        $m: Member(identity == "gold")
+    then
+        $m.setResult(0.7);
+        System.out.print($m.getResult());
+		update($m);
+end
+
+rule "silver"
+
+    when
+        $m: Member(identity == "silver")
+    then
+        $m.setResult(0.8);
+        System.out.print($m.getResult());
+		update($m);
+end

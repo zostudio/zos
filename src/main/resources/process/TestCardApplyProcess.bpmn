@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="TestCardApplyProcess" name="测试卡申请流程" isExecutable="true">
+    <startEvent id="TCAPStart" name="测试卡申请流程开始"></startEvent>
+    <userTask id="TCAPDepThrCfg" name="申请部门三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="TCAPStart" targetRef="TCAPDepThrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepThrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPDepSedCfg" name="申请部门二级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="TCAPQgsScbCbrCfg" name="区公司市场部承办人员审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="TCAPDepSedCfg" targetRef="TCAPDepThrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepThrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPQgsScbThrCfg" name="区公司市场部三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="TCAPQgsScbSedCfg" name="区公司市场部二级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="TCAPQgsScbThrCfg" targetRef="TCAPQgsScbSedCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPQgsScbSedCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPQgsScbCbrFp" name="区公司市场部承办人员分派">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="TCAPQgsScbSedCfg" targetRef="TCAPQgsScbCbrFp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPQgsScbCbrFp'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPQgsScbCbrBclrhm" name="分公司承办人员办卡录入号码">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow7" sourceRef="TCAPQgsScbCbrFp" targetRef="TCAPQgsScbCbrBclrhm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPQgsScbCbrBclrhm'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPDepApyCfglrhm" name="申请部门申请人确认录入号码">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow8" sourceRef="TCAPQgsScbCbrBclrhm" targetRef="TCAPDepApyCfglrhm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyCfglrhm'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPSupThrCfg" name="业务支撑中心三级经理分派">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow9" sourceRef="TCAPDepApyCfglrhm" targetRef="TCAPSupThrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPSupThrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPSupCbrCfg" name="业务支撑中心承办人处理">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow10" sourceRef="TCAPSupThrCfg" targetRef="TCAPSupCbrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPSupCbrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPDepApyChg" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow11" sourceRef="TCAPQgsScbCbrCfg" targetRef="TCAPDepApyChg"></sequenceFlow>
+    <endEvent id="TCAPApplyEnd" name="测试卡申请流程申请人终止">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTestCardApplyProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow12" sourceRef="TCAPDepApyChg" targetRef="TCAPApplyEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPApplyEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="TCAPDepApyChg" targetRef="TCAPDepThrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepThrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="TCAPQgsScbSedCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="TCAPQgsScbThrCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="TCAPQgsScbCbrCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="TCAPDepSedCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TCAPDepApyCfg" name="申请人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTestCardApplyProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTestCardApplyProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow18" sourceRef="TCAPSupCbrCfg" targetRef="TCAPDepApyCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="TCAPEnd" name="测试卡申请流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTestCardApplyProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow19" sourceRef="TCAPDepApyCfg" targetRef="TCAPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="TCAPQgsScbCbrFp" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="TCAPQgsScbCbrBclrhm" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="TCAPDepApyCfglrhm" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow23" sourceRef="TCAPSupThrCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow24" sourceRef="TCAPSupCbrCfg" targetRef="TCAPDepApyChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepApyChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow25" sourceRef="TCAPDepThrCfg" targetRef="TCAPDepSedCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPDepSedCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow26" sourceRef="TCAPQgsScbCbrCfg" targetRef="TCAPQgsScbThrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPQgsScbThrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow27" sourceRef="TCAPDepSedCfg" targetRef="TCAPQgsScbCbrCfg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCAPQgsScbCbrCfg'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_TestCardApplyProcess">
+    <bpmndi:BPMNPlane bpmnElement="TestCardApplyProcess" id="BPMNPlane_TestCardApplyProcess">
+      <bpmndi:BPMNShape bpmnElement="TCAPStart" id="BPMNShape_TCAPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPDepThrCfg" id="BPMNShape_TCAPDepThrCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="169.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPDepSedCfg" id="BPMNShape_TCAPDepSedCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPQgsScbCbrCfg" id="BPMNShape_TCAPQgsScbCbrCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPQgsScbThrCfg" id="BPMNShape_TCAPQgsScbThrCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="200.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPQgsScbSedCfg" id="BPMNShape_TCAPQgsScbSedCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="292.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPQgsScbCbrFp" id="BPMNShape_TCAPQgsScbCbrFp">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="388.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPQgsScbCbrBclrhm" id="BPMNShape_TCAPQgsScbCbrBclrhm">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPDepApyCfglrhm" id="BPMNShape_TCAPDepApyCfglrhm">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPSupThrCfg" id="BPMNShape_TCAPSupThrCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="169.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPSupCbrCfg" id="BPMNShape_TCAPSupCbrCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="169.0" y="388.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPDepApyChg" id="BPMNShape_TCAPDepApyChg">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="200.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPApplyEnd" id="BPMNShape_TCAPApplyEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="204.0" y="210.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPDepApyCfg" id="BPMNShape_TCAPDepApyCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="169.0" y="298.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCAPEnd" id="BPMNShape_TCAPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="308.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="135.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="169.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="382.0" y="100.0"></omgdi:waypoint>
+        <omgdi:waypoint x="303.0" y="82.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="100.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="532.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="292.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="532.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="388.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="532.0" y="443.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="480.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="480.0" y="507.0"></omgdi:waypoint>
+        <omgdi:waypoint x="435.0" y="507.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="330.0" y="507.0"></omgdi:waypoint>
+        <omgdi:waypoint x="274.0" y="507.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="221.0" y="480.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="443.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="532.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="330.0" y="227.0"></omgdi:waypoint>
+        <omgdi:waypoint x="239.0" y="227.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="382.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="261.0" y="192.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="155.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="532.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="480.0" y="227.0"></omgdi:waypoint>
+        <omgdi:waypoint x="435.0" y="227.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="532.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="382.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="221.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="353.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="169.0" y="325.0"></omgdi:waypoint>
+        <omgdi:waypoint x="135.0" y="325.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="532.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="532.0" y="480.0"></omgdi:waypoint>
+        <omgdi:waypoint x="437.0" y="434.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="382.0" y="480.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="221.0" y="480.0"></omgdi:waypoint>
+        <omgdi:waypoint x="310.0" y="428.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="221.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="274.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="532.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="435.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

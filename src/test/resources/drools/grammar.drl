@@ -1,0 +1,33 @@
+//created on: 2019-8-29
+package com.zos.activiti.drools
+
+//list any import classes here.
+
+expander customLanguage.dsl
+
+
+//declare any global variables here
+
+function myFunction( ... ) {
+    //function content (can have multiple functions) 
+}
+
+//query
+
+rule "Your First Rule"
+
+    when
+        //conditions
+    then
+        //actions
+
+end
+
+rule "Your Second Rule"
+    //include attributes such as "salience" here...
+    when
+        //conditions
+    then
+        //actions
+
+end

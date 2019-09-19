@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="EOSFBProcess" name="资费上线后60天后评估" isExecutable="true">
+    <startEvent id="EOSFBPStartEvent" name="资费上线后60天后评估开始"></startEvent>
+    <userTask id="EOSFBPFzr" name="负责人">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createEOSFBProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteEOSFBProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="EOSFBPStartEvent" targetRef="EOSFBPFzr">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='EOSFBPFzr'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="EOSFBPEndEvent" name="资费上线后60天后评估结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endEOSFBProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow2" sourceRef="EOSFBPSubMgr" targetRef="EOSFBPEndEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='EOSFBPEndEvent'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="EOSFBPSubMgr" name="区公司主管部门负责人">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createEOSFBProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteEOSFBProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="EOSFBPFzr" targetRef="EOSFBPSubMgr">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='EOSFBPSubMgr'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="EOSFBPSubMgr" targetRef="EOSFBPFzr">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='EOSFBPFzr'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_EOSFBProcess">
+    <bpmndi:BPMNPlane bpmnElement="EOSFBProcess" id="BPMNPlane_EOSFBProcess">
+      <bpmndi:BPMNShape bpmnElement="EOSFBPStartEvent" id="BPMNShape_EOSFBPStartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="120.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EOSFBPFzr" id="BPMNShape_EOSFBPFzr">
+        <omgdc:Bounds height="55.0" width="105.0" x="200.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EOSFBPEndEvent" id="BPMNShape_EOSFBPEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="530.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EOSFBPSubMgr" id="BPMNShape_EOSFBPSubMgr">
+        <omgdc:Bounds height="55.0" width="105.0" x="370.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="155.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="200.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="475.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="305.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="422.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="326.0" y="98.0"></omgdi:waypoint>
+        <omgdi:waypoint x="252.0" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

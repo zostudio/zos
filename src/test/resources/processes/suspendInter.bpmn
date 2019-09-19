@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1566553282060" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="myProcess_1" isClosed="false" isExecutable="true" processType="None">
+    <startEvent id="StartEvent" name="StartEvent"/>
+    <intermediateCatchEvent id="IntermediateCatchingEvent" name="IntermediateCatchingEvent">
+      <timerEventDefinition id="_3_ED_1">
+        <timeDuration><![CDATA[PT15S]]></timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <userTask activiti:exclusive="true" id="UserTask" name="UserTask"/>
+    <endEvent id="EndEvent" name="EndEvent"/>
+    <sequenceFlow id="_6" sourceRef="StartEvent" targetRef="IntermediateCatchingEvent"/>
+    <sequenceFlow id="_7" sourceRef="IntermediateCatchingEvent" targetRef="UserTask"/>
+    <sequenceFlow id="_8" sourceRef="UserTask" targetRef="EndEvent"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="myProcess_1">
+      <bpmndi:BPMNShape bpmnElement="StartEvent" id="Shape-StartEvent">
+        <omgdc:Bounds height="32.0" width="32.0" x="50.0" y="145.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="IntermediateCatchingEvent" id="Shape-IntermediateCatchingEvent">
+        <omgdc:Bounds height="32.0" width="32.0" x="140.0" y="140.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask" id="Shape-UserTask">
+        <omgdc:Bounds height="55.0" width="85.0" x="265.0" y="105.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndEvent" id="Shape-EndEvent">
+        <omgdc:Bounds height="32.0" width="32.0" x="300.0" y="25.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="StartEvent" targetElement="IntermediateCatchingEvent">
+        <omgdi:waypoint x="82.0" y="161.0"/>
+        <omgdi:waypoint x="140.0" y="156.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="IntermediateCatchingEvent" targetElement="UserTask">
+        <omgdi:waypoint x="172.0" y="156.0"/>
+        <omgdi:waypoint x="265.0" y="132.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="UserTask" targetElement="EndEvent">
+        <omgdi:waypoint x="316.0" y="105.0"/>
+        <omgdi:waypoint x="316.0" y="57.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

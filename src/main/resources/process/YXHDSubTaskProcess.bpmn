@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="YXHDSubTaskProcess" name="营销活动子任务流程" isExecutable="true">
+    <startEvent id="YXHDSTPStart" name="营销活动子任务流程开始"></startEvent>
+    <userTask id="YXHDSTPProcess" name="营销活动处理">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDSubTaskProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeYXHDSubTaskProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="YXHDSTPStart" targetRef="YXHDSTPProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDSTPProcess'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="YXHDSTPApplyConfig" name="提交人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDSubTaskProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeYXHDSubTaskProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="YXHDSTPProcess" targetRef="YXHDSTPApplyConfig">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDSTPApplyConfig'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="YXHDSTPEnd" name="营销活动子任务流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endYXHDSubTaskProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow3" sourceRef="YXHDSTPApplyConfig" targetRef="YXHDSTPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDSTPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="YXHDSTPApplyConfig" targetRef="YXHDSTPProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDSTPProcess'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_YXHDSubTaskProcess">
+    <bpmndi:BPMNPlane bpmnElement="YXHDSubTaskProcess" id="BPMNPlane_YXHDSubTaskProcess">
+      <bpmndi:BPMNShape bpmnElement="YXHDSTPStart" id="BPMNShape_YXHDSTPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="160.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDSTPProcess" id="BPMNShape_YXHDSTPProcess">
+        <omgdc:Bounds height="55.0" width="105.0" x="240.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDSTPApplyConfig" id="BPMNShape_YXHDSTPApplyConfig">
+        <omgdc:Bounds height="55.0" width="105.0" x="390.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDSTPEnd" id="BPMNShape_YXHDSTPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="540.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="195.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="240.0" y="167.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="345.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="167.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="495.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="167.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="442.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="98.0"></omgdi:waypoint>
+        <omgdi:waypoint x="292.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

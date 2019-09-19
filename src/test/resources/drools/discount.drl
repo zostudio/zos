@@ -1,0 +1,123 @@
+//created on: 2019-8-28
+package com.zos.activiti.drools;
+
+//list any import classes here.
+import com.zos.activiti.drools.Member;
+import com.zos.activiti.drools.Sale;
+import com.zos.activiti.drools.FunctionUtil;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+
+
+//declare any global variables here
+global String userName;
+global List maxThen30;
+
+function String formatDate(Date date) {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	return sdf.format(date);
+}
+
+function boolean canDiscount(int price, int amount, int discountBoundart) {
+	if (price * amount > discountBoundart) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function void prints(Sale sale) {
+	Date date = FunctionUtil.plusDay(sale.getDate(), 10);
+	System.out.println("销售单: " + sale.getSaleCode() + ", 时间: " + formatDate(date) + ", 金额: " + (sale.getAmount() * sale.getPrice()));
+}
+
+rule "Sale Discount"
+
+	when
+		$s: Sale(canDiscount(price, amount, 10));
+	then
+		prints($s);
+
+end
+
+rule "discount 7"
+
+    when
+        Member(identity == "gold");
+    then
+        System.out.println("黄金会员");
+
+end
+
+rule "discount 8"
+
+    when
+        Member(identity == "silver");
+    then
+        System.out.println("白银会员");
+
+end
+
+rule "discount 9"
+
+    when
+        Member(identity == "cooper");
+    then
+        System.out.println("青铜会员");
+
+end
+
+rule "discount 10"
+
+	when 
+		$m: Member(identity == "gold" && age > 30);
+	then
+	    userName = $m.getIdentity();
+		System.out.println("年龄大于 30 的人: " + userName);
+		maxThen30.add($m);
+
+end
+
+rule "discount 11"
+	activation-group "activation-group"
+	salience 0
+	when
+	    Member(amount >= 100);
+    then
+    	System.out.println("消费金额大于等于100元");
+
+end
+
+rule "discount 12"
+	activation-group "activation-group"
+	salience 2
+	when
+	    Member(amount >= 120);
+    then
+    	System.out.println("消费金额大于等于120元");
+
+end
+
+rule "discount 13"
+	activation-group "activation-group"
+	salience 3
+	when
+	    $m: Member($a: amount >= 130);
+    then
+    	$m.setAfterDiscount($a - 30);
+    	System.out.println("消费金额大于等于130元");
+		update($m);
+end
+
+rule "discount 14"
+	when
+	    $m: Member($a: amount >= 100);
+    then
+    	$m.setAfterDiscount($a - 30);
+    	System.out.println("消费金额大于等于100元");
+    	Member member = new Member();
+    	member.setAge(100);
+		insert(member);
+end

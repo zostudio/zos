@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="RepairBoardProcess" name="修板流程" isExecutable="true">
+    <startEvent id="RBPStart" name="修板流程开始"></startEvent>
+    <userTask id="RBPRepairBoard" name="修板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="RBPDestiny" name="定数">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <endEvent id="RBPEnd" name="修板流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endRepairBoardProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="RBPReduceBoard" name="减板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteRepairBoardProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="RBPStart" targetRef="RBPRepairBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPRepairBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow4" sourceRef="RBPRepairBoard" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="exclusivegateway2" targetRef="RBPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="exclusivegateway2" targetRef="RBPReduceBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPReduceBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow7" sourceRef="RBPReduceBoard" targetRef="exclusivegateway3"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway3" targetRef="RBPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="exclusivegateway3" targetRef="RBPRepairBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPRepairBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow13" sourceRef="RBPDestiny" targetRef="exclusivegateway4"></sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="exclusivegateway4" targetRef="RBPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="exclusivegateway4" targetRef="RBPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="exclusivegateway4" targetRef="RBPReduceBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='RBPReduceBoard'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_RepairBoardProcess">
+    <bpmndi:BPMNPlane bpmnElement="RepairBoardProcess" id="BPMNPlane_RepairBoardProcess">
+      <bpmndi:BPMNShape bpmnElement="RBPStart" id="BPMNShape_RBPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="90.0" y="200.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RBPRepairBoard" id="BPMNShape_RBPRepairBoard">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RBPDestiny" id="BPMNShape_RBPDestiny">
+        <omgdc:Bounds height="55.0" width="105.0" x="430.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RBPEnd" id="BPMNShape_RBPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="700.0" y="200.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RBPReduceBoard" id="BPMNShape_RBPReduceBoard">
+        <omgdc:Bounds height="55.0" width="105.0" x="308.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="340.0" y="197.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
+        <omgdc:Bounds height="40.0" width="40.0" x="212.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+        <omgdc:Bounds height="40.0" width="40.0" x="580.0" y="198.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="125.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="217.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="285.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="310.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="217.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="380.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="217.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="360.0" y="197.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="308.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="252.0" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="212.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="63.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="63.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="482.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="482.0" y="245.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="232.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="190.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="535.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="218.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="620.0" y="218.0"></omgdi:waypoint>
+        <omgdi:waypoint x="700.0" y="217.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="600.0" y="238.0"></omgdi:waypoint>
+        <omgdi:waypoint x="601.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="482.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="482.0" y="245.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="600.0" y="198.0"></omgdi:waypoint>
+        <omgdi:waypoint x="600.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="413.0" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="YXHDTFProcess" name="营销25天" isExecutable="true">
+    <startEvent id="YXHDTFPStartEvent" name="营销25天开始"></startEvent>
+    <userTask id="YXHDTFPThr" name="三级经理">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDTFProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteYXHDTFProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="YXHDTFPTwo" name="二级经理">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDTFProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteYXHDTFProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="YXHDTFPThr" targetRef="YXHDTFPTwo">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPTwo'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="YXHDTFPFzr" name="负责人政企市场">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDTFProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteYXHDTFProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="YXHDTFPTwo" targetRef="YXHDTFPFzr">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPFzr'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="YXHDTFPEndEvent" name="营销25天结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endYXHDTFProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow4" sourceRef="YXHDTFPFzr" targetRef="YXHDTFPEndEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPEndEvent'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="YXHDTFPApply" name="营销活动申请人后评估">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createYXHDTFProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteYXHDTFProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="YXHDTFPStartEvent" targetRef="YXHDTFPApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPApply'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="YXHDTFPApply" targetRef="YXHDTFPThr">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPThr'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="YXHDTFPThr" targetRef="YXHDTFPApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPApply'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="YXHDTFPTwo" targetRef="YXHDTFPApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPApply'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="YXHDTFPFzr" targetRef="YXHDTFPApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='YXHDTFPApply'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_YXHDTFProcess">
+    <bpmndi:BPMNPlane bpmnElement="YXHDTFProcess" id="BPMNPlane_YXHDTFProcess">
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPStartEvent" id="BPMNShape_YXHDTFPStartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="484.0" y="174.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPThr" id="BPMNShape_YXHDTFPThr">
+        <omgdc:Bounds height="55.0" width="105.0" x="158.0" y="41.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPTwo" id="BPMNShape_YXHDTFPTwo">
+        <omgdc:Bounds height="55.0" width="105.0" x="312.0" y="41.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPFzr" id="BPMNShape_YXHDTFPFzr">
+        <omgdc:Bounds height="55.0" width="105.0" x="490.0" y="41.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPEndEvent" id="BPMNShape_YXHDTFPEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="525.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="YXHDTFPApply" id="BPMNShape_YXHDTFPApply">
+        <omgdc:Bounds height="55.0" width="105.0" x="312.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="263.0" y="68.0"></omgdi:waypoint>
+        <omgdi:waypoint x="312.0" y="68.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="417.0" y="68.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="68.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="542.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="542.0" y="164.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="484.0" y="191.0"></omgdi:waypoint>
+        <omgdi:waypoint x="417.0" y="191.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="364.0" y="164.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="96.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="210.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="191.0"></omgdi:waypoint>
+        <omgdi:waypoint x="312.0" y="191.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="364.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="164.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="542.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="164.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

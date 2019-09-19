@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="SubComReportCopyProcess" name="区公司分公司报告报备流程" isExecutable="true">
+    <startEvent id="SCRCPStartEvent" name="区公司分公司报告报备流程启动"></startEvent>
+    <userTask id="SCRCSCGetTask" name="分公司接受任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="SCRCPStartEvent" targetRef="SCRCSCGetTask"></sequenceFlow>
+    <userTask id="SCRCSCMktThrMgrCfm" name="分公司市场部三级经理审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="SCRCSCGetTask" targetRef="SCRCSCMktThrMgrCfm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCMktThrMgrCfm'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="SCRCSCSubMgrCfm" name="分公司分管副总经理审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="SCRCSCMktThrMgrCfm" targetRef="SCRCSCSubMgrCfm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCSubMgrCfm'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="SCRCSCMktProSign" name="区公司市场部相关专业室分派">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow4" sourceRef="SCRCSCSubMgrCfm" targetRef="SCRCSCMktProSign">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCMktProSign'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="SCRCSCMktProDo" name="区公司市场部相关专业室执行人处理">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="SCRCSCMktProSign" targetRef="SCRCSCMktProDo"></sequenceFlow>
+    <userTask id="SCRCAppCfm" name="申请人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="SCRCSCMktProDo" targetRef="SCRCAppCfm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCAppCfm'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="SCRCPEndEvent" name="区公司分公司报告报备流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endSubComReportCopyTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow7" sourceRef="SCRCAppCfm" targetRef="SCRCPEndEvent"></sequenceFlow>
+    <userTask id="SCRCAppCag" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createSubComReportCopyTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeSubComReportCopyTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow8" sourceRef="SCRCSCGetTask" targetRef="SCRCAppCag">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCAppCag'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="SCRCAppCag" targetRef="SCRCSCGetTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCGetTask'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="SCRCPAppEndEvent" name="区公司分公司报告报备流程申请人终止">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endSubComReportCopyTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow10" sourceRef="SCRCAppCag" targetRef="SCRCPAppEndEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCPAppEndEvent'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="SCRCSCMktThrMgrCfm" targetRef="SCRCSCGetTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCGetTask'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="SCRCSCSubMgrCfm" targetRef="SCRCSCGetTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCSCGetTask'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="SCRCSCMktProDo" targetRef="SCRCAppCag">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='SCRCAppCag'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_SubComReportCopyProcess">
+    <bpmndi:BPMNPlane bpmnElement="SubComReportCopyProcess" id="BPMNPlane_SubComReportCopyProcess">
+      <bpmndi:BPMNShape bpmnElement="SCRCPStartEvent" id="BPMNShape_SCRCPStartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="80.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCSCGetTask" id="BPMNShape_SCRCSCGetTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCSCMktThrMgrCfm" id="BPMNShape_SCRCSCMktThrMgrCfm">
+        <omgdc:Bounds height="55.0" width="105.0" x="331.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCSCSubMgrCfm" id="BPMNShape_SCRCSCSubMgrCfm">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCSCMktProSign" id="BPMNShape_SCRCSCMktProSign">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCSCMktProDo" id="BPMNShape_SCRCSCMktProDo">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="350.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCAppCfm" id="BPMNShape_SCRCAppCfm">
+        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="450.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCPEndEvent" id="BPMNShape_SCRCPEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="515.0" y="560.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCAppCag" id="BPMNShape_SCRCAppCag">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="350.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SCRCPAppEndEvent" id="BPMNShape_SCRCPAppEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="215.0" y="460.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="115.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="285.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="331.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="436.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="532.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="532.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="350.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="532.0" y="405.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="450.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="532.0" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="560.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="232.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="350.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="232.0" y="350.0"></omgdi:waypoint>
+        <omgdi:waypoint x="175.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="232.0" y="405.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="460.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="383.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="311.0" y="196.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="532.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="532.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="480.0" y="377.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="377.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

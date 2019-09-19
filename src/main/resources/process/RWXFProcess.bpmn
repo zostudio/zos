@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="RWXFProcess" name="任务下发流程" isExecutable="true">
+    <startEvent id="RWXFStart" name="任务下发开始"></startEvent>
+    <userTask id="RWXFGFGSFZR" name="各分公司负责人">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createRWXFProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteRWXFProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="RWXFStart" targetRef="RWXFGFGSFZR"></sequenceFlow>
+    <userTask id="RWXFGFGSFZRSJJLSH" name="各分公司负责人三级经理审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createRWXFProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteRWXFProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="RWXFGFGSFZR" targetRef="RWXFGFGSFZRSJJLSH"></sequenceFlow>
+    <endEvent id="RWXFEnd" name="任务下发结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endRWXFProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow3" sourceRef="RWXFGFGSFZRSJJLSH" targetRef="RWXFEnd"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_RWXFProcess">
+    <bpmndi:BPMNPlane bpmnElement="RWXFProcess" id="BPMNPlane_RWXFProcess">
+      <bpmndi:BPMNShape bpmnElement="RWXFStart" id="BPMNShape_RWXFStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="90.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RWXFGFGSFZR" id="BPMNShape_RWXFGFGSFZR">
+        <omgdc:Bounds height="55.0" width="105.0" x="170.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RWXFGFGSFZRSJJLSH" id="BPMNShape_RWXFGFGSFZRSJJLSH">
+        <omgdc:Bounds height="55.0" width="105.0" x="320.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RWXFEnd" id="BPMNShape_RWXFEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="470.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="125.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="275.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="425.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

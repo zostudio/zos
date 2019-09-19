@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="multipleProcess" name="multipleProcess" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <serviceTask id="ServiceTaskA" name="ServiceTaskA" activiti:class="com.zos.activiti.delegate.MultipleActivitiJobDelegate">
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:elementVariable="data4">
+        <loopCardinality>2</loopCardinality>
+      </multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <userTask id="UserTaskA" name="UserTaskA">
+      <multiInstanceLoopCharacteristics isSequential="true">
+        <loopCardinality>2</loopCardinality>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="startevent1" targetRef="ServiceTaskA"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="UserTaskA" targetRef="endevent1"></sequenceFlow>
+    <serviceTask id="ServiceTaskB" name="ServiceTaskB" activiti:class="com.zos.activiti.delegate.MultipleActivitiJobDelegate">
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="datas" activiti:elementVariable="data3">
+        <completionCondition>${nrOfCompletedInstances &gt;= 2}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <sequenceFlow id="flow4" sourceRef="ServiceTaskA" targetRef="ServiceTaskB"></sequenceFlow>
+    <serviceTask id="ServiceTaskC" name="ServiceTaskC" activiti:class="com.zos.activiti.delegate.MultipleActivitiJobDelegate">
+      <multiInstanceLoopCharacteristics isSequential="true" activiti:collection="${data2}" activiti:elementVariable="data3"></multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <sequenceFlow id="flow5" sourceRef="ServiceTaskB" targetRef="ServiceTaskC"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="ServiceTaskC" targetRef="UserTaskA"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_multipleProcess">
+    <bpmndi:BPMNPlane bpmnElement="multipleProcess" id="BPMNPlane_multipleProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="740.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskA" id="BPMNShape_ServiceTaskA">
+        <omgdc:Bounds height="55.0" width="105.0" x="230.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskA" id="BPMNShape_UserTaskA">
+        <omgdc:Bounds height="55.0" width="105.0" x="450.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskB" id="BPMNShape_ServiceTaskB">
+        <omgdc:Bounds height="55.0" width="105.0" x="230.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskC" id="BPMNShape_ServiceTaskC">
+        <omgdc:Bounds height="55.0" width="105.0" x="450.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="95.0" y="197.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="197.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="555.0" y="197.0"></omgdi:waypoint>
+        <omgdi:waypoint x="740.0" y="197.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="282.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="282.0" y="105.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="335.0" y="77.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="77.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="502.0" y="105.0"></omgdi:waypoint>
+        <omgdi:waypoint x="502.0" y="170.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

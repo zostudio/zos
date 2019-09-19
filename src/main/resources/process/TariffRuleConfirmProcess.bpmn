@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="TariffRuleConfirmProcess" name="资费规则确认流程" isExecutable="true">
+    <startEvent id="TRCPStartEvent" name="资费规则确认流程启动"></startEvent>
+    <endEvent id="TRCPEndEvent" name="资费规则确认流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTariffRuleConfirmProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="TRCPSubComSupThrMgrVer" name="区公司业支三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" name="`" sourceRef="TRCPStartEvent" targetRef="TRCPSubComSupThrMgrVer"></sequenceFlow>
+    <userTask id="TRCPSupOprVer" name="业支实施人员审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="TRCPSubComSupThrMgrVer" targetRef="TRCPSupOprVer"></sequenceFlow>
+    <userTask id="TRCPSubComSupThrMgrReVer" name="区公司业支三级经理复核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="TRCPSupOprVer" targetRef="TRCPSubComSupThrMgrReVer">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPSubComSupThrMgrReVer'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TRCPFntThrMgrVer" name="财务部三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow4" sourceRef="TRCPSubComSupThrMgrReVer" targetRef="TRCPFntThrMgrVer"></sequenceFlow>
+    <userTask id="TRCPAppChg" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="TRCPSupOprVer" targetRef="TRCPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TRCPFntOpr" name="财务部执行人">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow8" sourceRef="TRCPFntThrMgrVer" targetRef="TRCPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TRCPSubComAnyThrMgrVer" name="区公司经营分析室三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow9" sourceRef="TRCPFntOpr" targetRef="TRCPSubComAnyThrMgrVer"></sequenceFlow>
+    <userTask id="TRCPSubComPlaThrMgrVer" name="区公司营销策划室三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow10" sourceRef="TRCPSubComAnyThrMgrVer" targetRef="TRCPSubComPlaThrMgrVer">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPSubComPlaThrMgrVer'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="TRCPSubComAnyThrMgrVer" targetRef="TRCPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="TRCPSubComPlaThrMgrVer" targetRef="TRCPAppChg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPAppChg'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TRCPSubComSupThrMgrAgn" name="区公司业支三级经理分派">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow13" sourceRef="TRCPSubComPlaThrMgrVer" targetRef="TRCPSubComSupThrMgrAgn">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPSubComSupThrMgrAgn'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TRCPSupOprCfg" name="业支实施人员配置">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow14" sourceRef="TRCPSubComSupThrMgrAgn" targetRef="TRCPSupOprCfg"></sequenceFlow>
+    <userTask id="TRCPAppCfm" name="申请人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeTariffRuleConfirmProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow15" sourceRef="TRCPSupOprCfg" targetRef="TRCPAppCfm"></sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="TRCPAppCfm" targetRef="TRCPEndEvent"></sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="TRCPAppChg" targetRef="TRCPSubComSupThrMgrVer">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPSubComSupThrMgrVer'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="TRCPAppEndEvent" name="资费规则确认流程申请人终止">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTariffRuleConfirmProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow18" sourceRef="TRCPAppChg" targetRef="TRCPAppEndEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TRCPAppEndEvent'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="TRCPFntThrMgrVer" targetRef="TRCPFntOpr"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_TariffRuleConfirmProcess">
+    <bpmndi:BPMNPlane bpmnElement="TariffRuleConfirmProcess" id="BPMNPlane_TariffRuleConfirmProcess">
+      <bpmndi:BPMNShape bpmnElement="TRCPStartEvent" id="BPMNShape_TRCPStartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="20.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPEndEvent" id="BPMNShape_TRCPEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="560.0" y="440.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSubComSupThrMgrVer" id="BPMNShape_TRCPSubComSupThrMgrVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSupOprVer" id="BPMNShape_TRCPSupOprVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSubComSupThrMgrReVer" id="BPMNShape_TRCPSubComSupThrMgrReVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPFntThrMgrVer" id="BPMNShape_TRCPFntThrMgrVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPAppChg" id="BPMNShape_TRCPAppChg">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPFntOpr" id="BPMNShape_TRCPFntOpr">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSubComAnyThrMgrVer" id="BPMNShape_TRCPSubComAnyThrMgrVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSubComPlaThrMgrVer" id="BPMNShape_TRCPSubComPlaThrMgrVer">
+        <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSubComSupThrMgrAgn" id="BPMNShape_TRCPSubComSupThrMgrAgn">
+        <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPSupOprCfg" id="BPMNShape_TRCPSupOprCfg">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPAppCfm" id="BPMNShape_TRCPAppCfm">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TRCPAppEndEvent" id="BPMNShape_TRCPAppEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="135.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="55.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="100.0" y="147.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="4.0" x="55.0" y="147.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="205.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="355.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="452.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="452.0" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="302.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="302.0" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="400.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="355.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="400.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="355.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="250.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="205.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="302.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="302.0" y="285.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="152.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="302.0" y="285.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="152.0" y="385.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="430.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="205.0" y="457.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="457.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="355.0" y="457.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="457.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="505.0" y="457.0"></omgdi:waypoint>
+        <omgdi:waypoint x="560.0" y="457.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="302.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="250.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="452.0" y="285.0"></omgdi:waypoint>
+        <omgdi:waypoint x="452.0" y="330.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

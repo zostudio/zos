@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="TaskWcsProcess" name="工作量集中结算流程" isExecutable="true">
+    <startEvent id="TWCSPStart" name="工作量集中结算流程开始"></startEvent>
+    <endEvent id="TWCSPEnd" name="工作量集中结算流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTaskWcsProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="TWCSPReqManager" name="需求管理员">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTaskWcsProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{complateTaskWcsProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="TWCSPContract" name="合同负责人审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTaskWcsProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{complateTaskWcsProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="TWCSPStart" targetRef="TWCSPContract"></sequenceFlow>
+    <userTask id="TWCSPVendor" name="厂商和设计院人员会签">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTaskWcsProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{complateTaskWcsProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="TWCSPContract" targetRef="TWCSPVendor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPVendor'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="TWCSPContract" targetRef="TWCSPReqManager">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPReqManager'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="TWCSPThree" name="业支三级经理审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTaskWcsProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{complateTaskWcsProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="TWCSPVendor" targetRef="TWCSPThree"></sequenceFlow>
+    <userTask id="TWCSPSecond" name="业支二级经理审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createTaskWcsProcessTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{complateTaskWcsProcessTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="TWCSPThree" targetRef="TWCSPSecond">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPSecond'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="TWCSPThree" targetRef="TWCSPReqManager">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPReqManager'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="TWCSPSecond" targetRef="TWCSPReqManager">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPReqManager'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="TWCSPSecond" targetRef="TWCSPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="TWCSPReqManagerEnd" name="需求管理人员终止">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endTaskWcsProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow10" sourceRef="TWCSPReqManager" targetRef="TWCSPReqManagerEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPReqManagerEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="TWCSPReqManager" targetRef="TWCSPContract">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TWCSPContract'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_TaskWcsProcess">
+    <bpmndi:BPMNPlane bpmnElement="TaskWcsProcess" id="BPMNPlane_TaskWcsProcess">
+      <bpmndi:BPMNShape bpmnElement="TWCSPStart" id="BPMNShape_TWCSPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="1.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPEnd" id="BPMNShape_TWCSPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="1.0" y="398.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPReqManager" id="BPMNShape_TWCSPReqManager">
+        <omgdc:Bounds height="55.0" width="105.0" x="106.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPContract" id="BPMNShape_TWCSPContract">
+        <omgdc:Bounds height="55.0" width="105.0" x="106.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPVendor" id="BPMNShape_TWCSPVendor">
+        <omgdc:Bounds height="55.0" width="105.0" x="371.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPThree" id="BPMNShape_TWCSPThree">
+        <omgdc:Bounds height="55.0" width="105.0" x="371.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPSecond" id="BPMNShape_TWCSPSecond">
+        <omgdc:Bounds height="55.0" width="105.0" x="106.0" y="388.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TWCSPReqManagerEnd" id="BPMNShape_TWCSPReqManagerEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="1.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="36.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="106.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="211.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="371.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="158.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="232.0" y="206.0"></omgdi:waypoint>
+        <omgdi:waypoint x="158.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="423.0" y="175.0"></omgdi:waypoint>
+        <omgdi:waypoint x="423.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="423.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="158.0" y="388.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="371.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="211.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="158.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="158.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="106.0" y="415.0"></omgdi:waypoint>
+        <omgdi:waypoint x="36.0" y="415.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="106.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="36.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="158.0" y="240.0"></omgdi:waypoint>
+        <omgdi:waypoint x="158.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

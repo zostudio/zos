@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="AcerProcess" name="宏碁笔记本" isExecutable="true">
+    <startEvent id="StartEvent" name="开始事件"></startEvent>
+    <userTask id="UserTask" name="人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="StartEventUserTask" name="开始事件到人工任务" sourceRef="StartEvent" targetRef="UserTask"></sequenceFlow>
+    <userTask id="SignUserTask" name="会签人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="StaffList" activiti:elementVariable="StaffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="UserTaskSignUserTask" name="人工任务到会签人工任务" sourceRef="UserTask" targetRef="SignUserTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='sign'}]]></conditionExpression>
+    </sequenceFlow>
+    <parallelGateway id="ParallelGatewayIn" name="并行入口网关"></parallelGateway>
+    <parallelGateway id="ParallelGatewayOut" name="并行出口网关"></parallelGateway>
+    <sequenceFlow id="GoParallelGatewayIn" name="会签到并行网关入口" sourceRef="SignUserTask" targetRef="ParallelGatewayIn"></sequenceFlow>
+    <userTask id="ParallelTopUserTask" name="并行上部人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="ParallelGatewayInUpUser" name="并行入口到上部人工" sourceRef="ParallelGatewayIn" targetRef="ParallelTopUserTask"></sequenceFlow>
+    <userTask id="ParallelBottomUserTask" name="并行下部人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="ParallelGatewayInBottomUser" name="并行入口下部到人工" sourceRef="ParallelGatewayIn" targetRef="ParallelBottomUserTask"></sequenceFlow>
+    <userTask id="LastUserTask" name="最后人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="ParallelTopSignTask" name="并行上部会签任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="StaffList" activiti:elementVariable="StaffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="TopUserToSign" name="上部用户到会签" sourceRef="ParallelTopUserTask" targetRef="ParallelTopSignTask"></sequenceFlow>
+    <exclusiveGateway id="ExclusiveGatewayTop" name="排他网关上部"></exclusiveGateway>
+    <sequenceFlow id="TopSignToExclusive" name="上部会签到排他网关" sourceRef="ParallelTopSignTask" targetRef="ExclusiveGatewayTop"></sequenceFlow>
+    <sequenceFlow id="TopExclusiveToOut" name="上部排他到并行出口" sourceRef="ExclusiveGatewayTop" targetRef="ParallelGatewayOut"></sequenceFlow>
+    <sequenceFlow id="BottomUserToOut" name="下部人工到并行出口" sourceRef="ParallelBottomUserTask" targetRef="ParallelGatewayOut"></sequenceFlow>
+    <sequenceFlow id="OutToLastUser" name="并行出口到最后人工" sourceRef="ParallelGatewayOut" targetRef="LastUserTask"></sequenceFlow>
+    <endEvent id="EndEvent" name="结束事件">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endAcerTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="OtherUserTask" name="其他人工任务">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createAcerTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeAcerTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="UserTaskOtherUserTask" name="人工任务到其他人工任务" sourceRef="UserTask" targetRef="OtherUserTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='user'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="OtherUserToEndEvent" name="其他用户到结束事件" sourceRef="OtherUserTask" targetRef="EndEvent"></sequenceFlow>
+    <sequenceFlow id="LastUserToEndEvent" name="最后用户到结束事件" sourceRef="LastUserTask" targetRef="EndEvent"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AcerProcess">
+    <bpmndi:BPMNPlane bpmnElement="AcerProcess" id="BPMNPlane_AcerProcess">
+      <bpmndi:BPMNShape bpmnElement="StartEvent" id="BPMNShape_StartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="1.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask" id="BPMNShape_UserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="170.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SignUserTask" id="BPMNShape_SignUserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="391.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ParallelGatewayIn" id="BPMNShape_ParallelGatewayIn">
+        <omgdc:Bounds height="40.0" width="40.0" x="541.0" y="147.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ParallelGatewayOut" id="BPMNShape_ParallelGatewayOut">
+        <omgdc:Bounds height="40.0" width="40.0" x="1001.0" y="147.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ParallelTopUserTask" id="BPMNShape_ParallelTopUserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="621.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ParallelBottomUserTask" id="BPMNShape_ParallelBottomUserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="621.0" y="210.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LastUserTask" id="BPMNShape_LastUserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="1111.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ParallelTopSignTask" id="BPMNShape_ParallelTopSignTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="771.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ExclusiveGatewayTop" id="BPMNShape_ExclusiveGatewayTop">
+        <omgdc:Bounds height="40.0" width="40.0" x="921.0" y="68.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndEvent" id="BPMNShape_EndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="1146.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="OtherUserTask" id="BPMNShape_OtherUserTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="170.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="StartEventUserTask" id="BPMNEdge_StartEventUserTask">
+        <omgdi:waypoint x="36.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="70.0" y="140.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="UserTaskSignUserTask" id="BPMNEdge_UserTaskSignUserTask">
+        <omgdi:waypoint x="275.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="391.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="275.0" y="167.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="GoParallelGatewayIn" id="BPMNEdge_GoParallelGatewayIn">
+        <omgdi:waypoint x="496.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="541.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="496.0" y="167.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="ParallelGatewayInUpUser" id="BPMNEdge_ParallelGatewayInUpUser">
+        <omgdi:waypoint x="561.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="673.0" y="115.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="561.0" y="147.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="ParallelGatewayInBottomUser" id="BPMNEdge_ParallelGatewayInBottomUser">
+        <omgdi:waypoint x="561.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="673.0" y="210.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="561.0" y="187.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="TopUserToSign" id="BPMNEdge_TopUserToSign">
+        <omgdi:waypoint x="726.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="771.0" y="87.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="726.0" y="87.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="TopSignToExclusive" id="BPMNEdge_TopSignToExclusive">
+        <omgdi:waypoint x="876.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="921.0" y="88.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="876.0" y="87.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="TopExclusiveToOut" id="BPMNEdge_TopExclusiveToOut">
+        <omgdi:waypoint x="961.0" y="88.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1021.0" y="88.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1021.0" y="147.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="961.0" y="88.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="BottomUserToOut" id="BPMNEdge_BottomUserToOut">
+        <omgdi:waypoint x="726.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1021.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1021.0" y="187.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="726.0" y="237.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="OutToLastUser" id="BPMNEdge_OutToLastUser">
+        <omgdi:waypoint x="1041.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1111.0" y="167.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="1041.0" y="167.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="UserTaskOtherUserTask" id="BPMNEdge_UserTaskOtherUserTask">
+        <omgdi:waypoint x="222.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="222.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="222.0" y="195.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="OtherUserToEndEvent" id="BPMNEdge_OtherUserToEndEvent">
+        <omgdi:waypoint x="275.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1146.0" y="347.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="275.0" y="347.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="LastUserToEndEvent" id="BPMNEdge_LastUserToEndEvent">
+        <omgdi:waypoint x="1163.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1163.0" y="330.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="1163.0" y="195.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

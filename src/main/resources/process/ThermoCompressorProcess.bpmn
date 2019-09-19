@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="ThermoCompressorProcess" name="热压机流程" isExecutable="true">
+    <startEvent id="TCPStart" name="热压机流程开始"></startEvent>
+    <userTask id="TCPThermoCompressor" name="热压机">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="TCPDestiny" name="定数">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <endEvent id="TCPEnd" name="热压机流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endThermoCompressorProcessTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="TCPReduceBoard" name="减板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="TCPAddBoard" name="加板">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{deleteThermoCompressorProcessSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow6" sourceRef="TCPReduceBoard" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="TCPThermoCompressor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPThermoCompressor'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="TCPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="TCPStart" targetRef="TCPThermoCompressor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPThermoCompressor'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow10" sourceRef="TCPThermoCompressor" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="exclusivegateway2" targetRef="TCPReduceBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPReduceBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="exclusivegateway2" targetRef="TCPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="exclusivegateway2" targetRef="TCPAddBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPAddBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow14" sourceRef="TCPDestiny" targetRef="exclusivegateway3"></sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="exclusivegateway3" targetRef="TCPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="exclusivegateway3" targetRef="TCPEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPEnd'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="exclusivegateway3" targetRef="TCPReduceBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPReduceBoard'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow18" sourceRef="TCPAddBoard" targetRef="exclusivegateway4"></sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="exclusivegateway4" targetRef="TCPDestiny">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPDestiny'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="exclusivegateway4" targetRef="TCPThermoCompressor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPThermoCompressor'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="exclusivegateway3" targetRef="TCPAddBoard">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='TCPAddBoard'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ThermoCompressorProcess">
+    <bpmndi:BPMNPlane bpmnElement="ThermoCompressorProcess" id="BPMNPlane_ThermoCompressorProcess">
+      <bpmndi:BPMNShape bpmnElement="TCPStart" id="BPMNShape_TCPStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="1.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCPThermoCompressor" id="BPMNShape_TCPThermoCompressor">
+        <omgdc:Bounds height="55.0" width="105.0" x="91.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCPDestiny" id="BPMNShape_TCPDestiny">
+        <omgdc:Bounds height="55.0" width="105.0" x="391.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCPEnd" id="BPMNShape_TCPEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="671.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCPReduceBoard" id="BPMNShape_TCPReduceBoard">
+        <omgdc:Bounds height="55.0" width="105.0" x="231.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TCPAddBoard" id="BPMNShape_TCPAddBoard">
+        <omgdc:Bounds height="55.0" width="105.0" x="231.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="123.0" y="7.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="263.0" y="127.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
+        <omgdc:Bounds height="40.0" width="40.0" x="541.0" y="128.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+        <omgdc:Bounds height="40.0" width="40.0" x="263.0" y="332.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="231.0" y="27.0"></omgdi:waypoint>
+        <omgdi:waypoint x="163.0" y="27.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="143.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="143.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="123.0" y="27.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-24.0" y="27.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-24.0" y="446.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="446.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="36.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="91.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="196.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="263.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="283.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="283.0" y="55.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="303.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="391.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="283.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="283.0" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="496.0" y="147.0"></omgdi:waypoint>
+        <omgdi:waypoint x="541.0" y="148.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="561.0" y="168.0"></omgdi:waypoint>
+        <omgdi:waypoint x="561.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="351.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="581.0" y="148.0"></omgdi:waypoint>
+        <omgdi:waypoint x="671.0" y="147.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="561.0" y="128.0"></omgdi:waypoint>
+        <omgdi:waypoint x="561.0" y="27.0"></omgdi:waypoint>
+        <omgdi:waypoint x="336.0" y="27.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="283.0" y="285.0"></omgdi:waypoint>
+        <omgdi:waypoint x="283.0" y="332.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="303.0" y="352.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="352.0"></omgdi:waypoint>
+        <omgdi:waypoint x="443.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="263.0" y="352.0"></omgdi:waypoint>
+        <omgdi:waypoint x="143.0" y="352.0"></omgdi:waypoint>
+        <omgdi:waypoint x="143.0" y="175.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="561.0" y="168.0"></omgdi:waypoint>
+        <omgdi:waypoint x="561.0" y="257.0"></omgdi:waypoint>
+        <omgdi:waypoint x="336.0" y="257.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <error id="notEnoughInfoError" errorCode="not_enough_info_error"/>
+  <process id="reviewSalesLead" name="Review Sales Lead" isExecutable="true">
+    <startEvent id="theStart" activiti:initiator="initiator"/>
+    <sequenceFlow id="flow1" sourceRef="theStart" targetRef="provideNewSalesLead"></sequenceFlow>
+
+    <userTask id="provideNewSalesLead" name="Provide new sales lead">
+      <extensionElements>
+        <activiti:formProperty id="customerName" name="Customer name" type="string" required="true"/>
+        <activiti:formProperty id="potentialProfit" name="Potential profit" type="long"/>
+        <activiti:formProperty id="details" name="Details" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="provideNewSalesLead" targetRef="reviewSalesLeadSubProcess"></sequenceFlow>
+
+    <subProcess id="reviewSalesLeadSubProcess" name="Review sales lead">
+      <startEvent id="subProcessStart"></startEvent>
+      <sequenceFlow id="flow3" sourceRef="subProcessStart" targetRef="fork"></sequenceFlow>
+
+      <parallelGateway id="fork"></parallelGateway>
+      <sequenceFlow id="flow4" sourceRef="fork" targetRef="reviewCustomerRating"></sequenceFlow>
+      <sequenceFlow id="flow5" sourceRef="fork" targetRef="reviewProfitability"></sequenceFlow>
+
+      <userTask id="reviewCustomerRating" name="Review customer rating" activiti:candidateGroups="group1"></userTask>
+      <sequenceFlow id="flow6" sourceRef="reviewCustomerRating" targetRef="subProcessEnd1"></sequenceFlow>
+
+      <endEvent id="subProcessEnd1"></endEvent>
+
+      <userTask id="reviewProfitability" name="Review profitability">
+        <documentation>
+          ${initiator} has published a new sales lead: ${customerName}. Details: ${details}
+        </documentation>
+        <extensionElements>
+          <activiti:formProperty id="notEnoughInformation" name="Do you believe this" type="enum" required="true">
+            <activiti:value id="false" name="Yes"/>
+            <activiti:value id="true" name="No (= request more info)"/>
+          </activiti:formProperty>
+        </extensionElements>
+      </userTask>
+      <sequenceFlow id="flow7" sourceRef="reviewProfitability" targetRef="enoughInformationCheck"></sequenceFlow>
+
+
+      <exclusiveGateway id="enoughInformationCheck" name="Enough information?"></exclusiveGateway>
+      <sequenceFlow id="flow8" sourceRef="enoughInformationCheck" targetRef="subProcessEnd2">
+        <conditionExpression>${notEnoughInformation == 'false'}</conditionExpression>
+      </sequenceFlow>
+      <sequenceFlow id="flow9" sourceRef="enoughInformationCheck" targetRef="notEnoughInformationEnd">
+        <conditionExpression>${notEnoughInformation == 'true'}</conditionExpression>
+      </sequenceFlow>
+
+      <endEvent id="subProcessEnd2"></endEvent>
+
+      <endEvent id="notEnoughInformationEnd">
+        <errorEventDefinition errorRef="notEnoughInfoError"/>
+      </endEvent>
+    </subProcess>
+    <sequenceFlow id="flow12" sourceRef="reviewSalesLeadSubProcess" targetRef="storeLeadCrmSystem"></sequenceFlow>
+
+    <boundaryEvent id="catchNotEnoughInformationError" attachedToRef="reviewSalesLeadSubProcess" cancelActivity="true">
+      <errorEventDefinition errorRef="notEnoughInfoError"/>
+    </boundaryEvent>
+    <sequenceFlow id="flow10" sourceRef="catchNotEnoughInformationError" targetRef="provideAdditionalDetails"></sequenceFlow>
+
+    <userTask id="provideAdditionalDetails" name="Provide additional details" activiti:assignee="${initiator}">
+      <documentation>Provide additional details for ${customerName}.</documentation>
+      <extensionElements>
+        <activiti:formProperty id="details" name="Additional details" type="string" required="true"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow11" sourceRef="provideAdditionalDetails" targetRef="reviewSalesLeadSubProcess"></sequenceFlow>
+
+    <task id="storeLeadCrmSystem" name="Store lead CRM system"></task>
+    <sequenceFlow id="flow13" sourceRef="storeLeadCrmSystem" targetRef="processEnd"></sequenceFlow>
+
+    <endEvent id="processEnd"></endEvent>
+  </process>
+</definitions>

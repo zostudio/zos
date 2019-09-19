@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="ExpensesNewProcess" name="新资费申请流程" isExecutable="true">
+    <startEvent id="expensesNewStart" name="新资费申请"></startEvent>
+    <userTask id="expensesNewThree" name="三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="expensesNewStart" targetRef="expensesNewThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewTwo" name="二级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="expensesNewThree" targetRef="expensesNewTwo">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewTwo'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewBusiAnalysis" name="经营分析室AB">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="expensesNewTwo" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewBusiOwner" name="各业务负责人审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="expensesNewBACollect" name="经营分析室汇总">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow7" sourceRef="expensesNewBusiOwner" targetRef="expensesNewBACollect"></sequenceFlow>
+    <userTask id="expensesNewBAThree" name="经分室三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow8" sourceRef="expensesNewBACollect" targetRef="expensesNewBAThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBAThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewBATwo" name="市场部二级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow9" sourceRef="expensesNewBAThree" targetRef="expensesNewBATwo">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBATwo'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewModify" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow17" sourceRef="expensesNewThree" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow18" sourceRef="expensesNewModify" targetRef="expensesNewThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="expensesNewBAThree" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="expensesNewTwo" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="expensesNewBACollect" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow26" sourceRef="expensesNewBATwo" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow27" sourceRef="expensesNewStart" targetRef="expensesNewBusiOwner">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiOwner'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow28" sourceRef="expensesNewModify" targetRef="expensesNewBusiOwner">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiOwner'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewSCTwoChief" name="市场部二级正经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow29" sourceRef="expensesNewBATwo" targetRef="expensesNewSCTwoChief">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewSCTwoChief'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewLeader" name="公司领导审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow30" sourceRef="expensesNewSCTwoChief" targetRef="expensesNewLeader">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewLeader'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewYZThree" name="业务支撑中心三级经理审批并分派">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow31" sourceRef="expensesNewLeader" targetRef="expensesNewYZThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewYZImpl" name="业支实施人员审核">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow32" sourceRef="expensesNewYZThree" targetRef="expensesNewYZImpl"></sequenceFlow>
+    <userTask id="expensesNewYZPracticeSend" name="业支实施人员配置后发送测试通知">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="expensesNewDZTest" name="业务测试人员测试并发送测试报告">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewSignTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewSignTaskListener}"></activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="staffList" activiti:elementVariable="staffId">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances == 1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow38" sourceRef="expensesNewSCTwoChief" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow39" sourceRef="expensesNewLeader" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow40" sourceRef="expensesNewSCTwoChief" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow41" sourceRef="expensesNewLeader" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewYZPracticeCheck" name="业支实施人员查看测试报告">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow42" sourceRef="expensesNewDZTest" targetRef="expensesNewYZPracticeCheck"></sequenceFlow>
+    <userTask id="expensesNewServiceManage" name="服务管理室汇总测试报告结果">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow43" sourceRef="expensesNewYZPracticeCheck" targetRef="expensesNewServiceManage">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewServiceManage'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewYZImplOnline" name="业支实施人员通知上线">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow44" sourceRef="expensesNewServiceManage" targetRef="expensesNewYZImplOnline">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZImplOnline'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewConfirm" name="申请人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow45" sourceRef="expensesNewYZImplOnline" targetRef="expensesNewConfirm"></sequenceFlow>
+    <userTask id="expensesNewYZPracticeConfirm" name="业支实施人员确认跟踪报告">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow46" sourceRef="expensesNewConfirm" targetRef="expensesNewYZPracticeConfirm"></sequenceFlow>
+    <endEvent id="expensesNewEnd" name="新资费申请结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endExpensesNewTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow47" sourceRef="expensesNewYZPracticeConfirm" targetRef="expensesNewEnd"></sequenceFlow>
+    <sequenceFlow id="flow48" sourceRef="expensesNewYZImpl" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow49" sourceRef="expensesNewYZImpl" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow50" sourceRef="expensesNewBusiAnalysis" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow51" sourceRef="exclusivegateway1" targetRef="expensesNewBusiOwner">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiOwner'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow52" sourceRef="exclusivegateway1" targetRef="expensesNewModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="expensesNewYZPracticeModify" name="业支实施人员修改配置">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createExpensesNewTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeExpensesNewTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow53" sourceRef="expensesNewYZPracticeCheck" targetRef="expensesNewYZPracticeModify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZPracticeModify'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow54" sourceRef="expensesNewYZPracticeModify" targetRef="expensesNewDZTest"></sequenceFlow>
+    <sequenceFlow id="flow56" sourceRef="expensesNewBAThree" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow57" sourceRef="expensesNewBATwo" targetRef="expensesNewBusiAnalysis">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewBusiAnalysis'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow58" sourceRef="expensesNewBATwo" targetRef="expensesNewYZThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow59" sourceRef="expensesNewSCTwoChief" targetRef="expensesNewYZThree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZThree'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow60" sourceRef="expensesNewYZImpl" targetRef="expensesNewYZPracticeSend">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZPracticeSend'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow61" sourceRef="expensesNewYZPracticeSend" targetRef="expensesNewDZTest"></sequenceFlow>
+    <sequenceFlow id="flow62" sourceRef="expensesNewServiceManage" targetRef="expensesNewYZPracticeSend">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='expensesNewYZPracticeSend'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ExpensesNewProcess">
+    <bpmndi:BPMNPlane bpmnElement="ExpensesNewProcess" id="BPMNPlane_ExpensesNewProcess">
+      <bpmndi:BPMNShape bpmnElement="expensesNewStart" id="BPMNShape_expensesNewStart">
+        <omgdc:Bounds height="35.0" width="35.0" x="71.0" y="1.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewThree" id="BPMNShape_expensesNewThree">
+        <omgdc:Bounds height="55.0" width="105.0" x="36.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewTwo" id="BPMNShape_expensesNewTwo">
+        <omgdc:Bounds height="55.0" width="105.0" x="191.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewBusiAnalysis" id="BPMNShape_expensesNewBusiAnalysis">
+        <omgdc:Bounds height="55.0" width="105.0" x="341.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewBusiOwner" id="BPMNShape_expensesNewBusiOwner">
+        <omgdc:Bounds height="55.0" width="105.0" x="613.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewBACollect" id="BPMNShape_expensesNewBACollect">
+        <omgdc:Bounds height="55.0" width="105.0" x="770.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewBAThree" id="BPMNShape_expensesNewBAThree">
+        <omgdc:Bounds height="55.0" width="105.0" x="921.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewBATwo" id="BPMNShape_expensesNewBATwo">
+        <omgdc:Bounds height="55.0" width="105.0" x="1071.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewModify" id="BPMNShape_expensesNewModify">
+        <omgdc:Bounds height="55.0" width="105.0" x="478.0" y="207.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewSCTwoChief" id="BPMNShape_expensesNewSCTwoChief">
+        <omgdc:Bounds height="55.0" width="105.0" x="1071.0" y="178.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewLeader" id="BPMNShape_expensesNewLeader">
+        <omgdc:Bounds height="55.0" width="105.0" x="1071.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZThree" id="BPMNShape_expensesNewYZThree">
+        <omgdc:Bounds height="55.0" width="105.0" x="1071.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZImpl" id="BPMNShape_expensesNewYZImpl">
+        <omgdc:Bounds height="55.0" width="105.0" x="931.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZPracticeSend" id="BPMNShape_expensesNewYZPracticeSend">
+        <omgdc:Bounds height="55.0" width="105.0" x="800.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewDZTest" id="BPMNShape_expensesNewDZTest">
+        <omgdc:Bounds height="55.0" width="105.0" x="666.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZPracticeCheck" id="BPMNShape_expensesNewYZPracticeCheck">
+        <omgdc:Bounds height="55.0" width="105.0" x="531.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewServiceManage" id="BPMNShape_expensesNewServiceManage">
+        <omgdc:Bounds height="55.0" width="105.0" x="402.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZImplOnline" id="BPMNShape_expensesNewYZImplOnline">
+        <omgdc:Bounds height="55.0" width="105.0" x="266.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewConfirm" id="BPMNShape_expensesNewConfirm">
+        <omgdc:Bounds height="55.0" width="105.0" x="131.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZPracticeConfirm" id="BPMNShape_expensesNewYZPracticeConfirm">
+        <omgdc:Bounds height="55.0" width="105.0" x="1.0" y="357.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewEnd" id="BPMNShape_expensesNewEnd">
+        <omgdc:Bounds height="35.0" width="35.0" x="36.0" y="284.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="510.0" y="96.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="expensesNewYZPracticeModify" id="BPMNShape_expensesNewYZPracticeModify">
+        <omgdc:Bounds height="55.0" width="105.0" x="602.0" y="445.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="88.0" y="36.0"></omgdi:waypoint>
+        <omgdi:waypoint x="88.0" y="89.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="141.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="296.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="718.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="875.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="921.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="1026.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1071.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="88.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="478.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="303.0" y="204.0"></omgdi:waypoint>
+        <omgdi:waypoint x="88.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="973.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="243.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="822.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="1071.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1016.0" y="149.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="88.0" y="36.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="89.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="1123.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1123.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="1123.0" y="233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1123.0" y="265.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="1123.0" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1123.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="1071.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1036.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow38" id="BPMNEdge_flow38">
+        <omgdi:waypoint x="1071.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="583.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow39" id="BPMNEdge_flow39">
+        <omgdi:waypoint x="1071.0" y="292.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="262.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="1071.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="813.0" y="189.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow41" id="BPMNEdge_flow41">
+        <omgdi:waypoint x="1123.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
+        <omgdi:waypoint x="666.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="636.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
+        <omgdi:waypoint x="531.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="507.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow44" id="BPMNEdge_flow44">
+        <omgdi:waypoint x="402.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="371.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow45" id="BPMNEdge_flow45">
+        <omgdi:waypoint x="266.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="236.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
+        <omgdi:waypoint x="131.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="106.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="53.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="53.0" y="319.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="983.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="983.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="262.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow50" id="BPMNEdge_flow50">
+        <omgdi:waypoint x="446.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow51" id="BPMNEdge_flow51">
+        <omgdi:waypoint x="550.0" y="116.0"></omgdi:waypoint>
+        <omgdi:waypoint x="613.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow52" id="BPMNEdge_flow52">
+        <omgdi:waypoint x="530.0" y="136.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53">
+        <omgdi:waypoint x="583.0" y="412.0"></omgdi:waypoint>
+        <omgdi:waypoint x="654.0" y="445.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow54" id="BPMNEdge_flow54">
+        <omgdi:waypoint x="654.0" y="445.0"></omgdi:waypoint>
+        <omgdi:waypoint x="718.0" y="412.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow56" id="BPMNEdge_flow56">
+        <omgdi:waypoint x="973.0" y="89.0"></omgdi:waypoint>
+        <omgdi:waypoint x="741.0" y="49.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="89.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow57" id="BPMNEdge_flow57">
+        <omgdi:waypoint x="1123.0" y="89.0"></omgdi:waypoint>
+        <omgdi:waypoint x="787.0" y="14.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="89.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow58" id="BPMNEdge_flow58">
+        <omgdi:waypoint x="1123.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1218.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1123.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow59" id="BPMNEdge_flow59">
+        <omgdi:waypoint x="1123.0" y="233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1204.0" y="289.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1123.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow60" id="BPMNEdge_flow60">
+        <omgdi:waypoint x="931.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="905.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow61" id="BPMNEdge_flow61">
+        <omgdi:waypoint x="800.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="771.0" y="384.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow62" id="BPMNEdge_flow62">
+        <omgdi:waypoint x="454.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="617.0" y="285.0"></omgdi:waypoint>
+        <omgdi:waypoint x="852.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="subProcessError" name="subProcessError" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <subProcess id="subProcessErrorSubProcess" name="subProcessErrorSubProcess">
+      <startEvent id="startevent2" name="Start"></startEvent>
+      <endEvent id="endevent1" name="End"></endEvent>
+      <serviceTask id="ServiceTaskA" name="ServiceTaskA" activiti:class="com.zos.activiti.delegate.SubProcessErrorJobDelegate"></serviceTask>
+      <sequenceFlow id="flow1" sourceRef="startevent2" targetRef="ServiceTaskA"></sequenceFlow>
+      <sequenceFlow id="flow2" sourceRef="ServiceTaskA" targetRef="endevent1"></sequenceFlow>
+    </subProcess>
+    <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="subProcessErrorSubProcess"></sequenceFlow>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow4" sourceRef="subProcessErrorSubProcess" targetRef="endevent2"></sequenceFlow>
+    <boundaryEvent id="boundaryerror1" name="Error" attachedToRef="subProcessErrorSubProcess">
+      <errorEventDefinition errorRef="subProcessErrorError"></errorEventDefinition>
+    </boundaryEvent>
+    <userTask id="UserTaskA" name="UserTaskA"></userTask>
+    <endEvent id="endevent3" name="End"></endEvent>
+    <sequenceFlow id="flow5" sourceRef="boundaryerror1" targetRef="UserTaskA"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="UserTaskA" targetRef="endevent3"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_subProcessError">
+    <bpmndi:BPMNPlane bpmnElement="subProcessError" id="BPMNPlane_subProcessError">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="83.0" y="213.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="subProcessErrorSubProcess" id="BPMNShape_subProcessErrorSubProcess">
+        <omgdc:Bounds height="261.0" width="491.0" x="210.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent2" id="BPMNShape_startevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="280.0" y="216.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="600.0" y="216.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskA" id="BPMNShape_ServiceTaskA">
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundaryerror1" id="BPMNShape_boundaryerror1">
+        <omgdc:Bounds height="30.0" width="30.0" x="460.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="820.0" y="213.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskA" id="BPMNShape_UserTaskA">
+        <omgdc:Bounds height="55.0" width="105.0" x="596.0" y="434.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="820.0" y="444.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="315.0" y="233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="233.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="515.0" y="233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="600.0" y="233.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="118.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="701.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="230.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="475.0" y="390.0"></omgdi:waypoint>
+        <omgdi:waypoint x="648.0" y="434.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="701.0" y="461.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="461.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

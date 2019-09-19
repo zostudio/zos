@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="LatefeeProcess" name="滞纳金减免流程" isExecutable="true">
+    <startEvent id="LFPStartEvent" name="申请人发起申请"></startEvent>
+    <userTask id="LFPDeptThrMgrChk" name="部门三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="LFPStartEvent" targetRef="LFPDeptThrMgrChk"></sequenceFlow>
+    <userTask id="LFPSubComSelZqThrMgrChk" name="分公司市场部/政企部三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="LFPDeptThrMgrChk" targetRef="LFPSubComSelZqThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComSelZqThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComMasMgrChk" name="分公司副总经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="LFPSubComProThrMgrChk" name="分公司承办部门三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" sourceRef="LFPSubComMasMgrChk" targetRef="LFPSubComProThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComProThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComProStaffChk" name="分公司承办部门承办人审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow6" sourceRef="LFPSubComProThrMgrChk" targetRef="LFPSubComProStaffChk"></sequenceFlow>
+    <endEvent id="LFPEndEvent" name="系统自动执行补退费流程结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endLatefeeTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="LFPAppChange" name="申请人修改">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow8" sourceRef="LFPDeptThrMgrChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComZqThrMgrChk" name="区公司政企部台室三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow9" sourceRef="LFPSubComMasMgrChk" targetRef="LFPSubComZqThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComZqThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComZqStaffChk" name="区公司政企部业务人员审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow10" sourceRef="LFPSubComZqThrMgrChk" targetRef="LFPSubComZqStaffChk"></sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="LFPSubComZqStaffChk" targetRef="LFPSubComProThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComProThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="LFPAppChange" targetRef="LFPDeptThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPDeptThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="LFPSubComSelZqThrMgrChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComSelThrMgrChk" name="区公司市场部台室三级经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow16" sourceRef="LFPSubComMasMgrChk" targetRef="LFPSubComSelThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComMasMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPSubComSelStaffChk" name="区公司市场部业务人员审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow17" sourceRef="LFPSubComSelThrMgrChk" targetRef="LFPSubComSelStaffChk"></sequenceFlow>
+    <sequenceFlow id="flow18" sourceRef="LFPSubComSelStaffChk" targetRef="LFPSubComProThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComProThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="LFPSubComSelZqThrMgrChk" targetRef="LFPSubComMasMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComMasMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="LFPSubComMasMgrChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="LFPSubComSelStaffChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="LFPSubComZqStaffChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="LFPAppEndEvent" name="系统自动执行补退费流程申请人结束">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="#{endLatefeeTaskListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <sequenceFlow id="flow23" sourceRef="LFPAppChange" targetRef="LFPAppEndEvent">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppEndEvent'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPAppConfirm" name="申请人确认">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow24" sourceRef="LFPSubComProStaffChk" targetRef="LFPAppConfirm"></sequenceFlow>
+    <sequenceFlow id="flow25" sourceRef="LFPAppConfirm" targetRef="LFPEndEvent"></sequenceFlow>
+    <userTask id="LFPSubComMaxMgrChk" name="分公司总经理审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow26" sourceRef="LFPSubComMasMgrChk" targetRef="LFPSubComMaxMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComMaxMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow27" sourceRef="LFPSubComMaxMgrChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow28" sourceRef="LFPSubComMaxMgrChk" targetRef="LFPSubComSelThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComSelThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow29" sourceRef="LFPSubComMaxMgrChk" targetRef="LFPSubComProThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComProThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow30" sourceRef="LFPSubComMaxMgrChk" targetRef="LFPSubComZqThrMgrChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComZqThrMgrChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow31" sourceRef="LFPSubComSelZqThrMgrChk" targetRef="LFPSubComProStaffChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPSubComProStaffChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="LFPDeptRepoChk" name="部门承办人">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="#{createLatefeeTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="#{completeLatefeeTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow32" sourceRef="LFPDeptThrMgrChk" targetRef="LFPDeptRepoChk">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPDeptRepoChk'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow33" sourceRef="LFPDeptRepoChk" targetRef="LFPAppConfirm">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppConfirm'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow34" sourceRef="LFPDeptRepoChk" targetRef="LFPAppChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${verify=='LFPAppChange'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_LatefeeProcess">
+    <bpmndi:BPMNPlane bpmnElement="LatefeeProcess" id="BPMNPlane_LatefeeProcess">
+      <bpmndi:BPMNShape bpmnElement="LFPStartEvent" id="BPMNShape_LFPStartEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="173.0" y="121.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPDeptThrMgrChk" id="BPMNShape_LFPDeptThrMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="320.0" y="111.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComSelZqThrMgrChk" id="BPMNShape_LFPSubComSelZqThrMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="589.0" y="111.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComMasMgrChk" id="BPMNShape_LFPSubComMasMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="589.0" y="221.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComProThrMgrChk" id="BPMNShape_LFPSubComProThrMgrChk">
+        <omgdc:Bounds height="56.0" width="105.0" x="260.0" y="381.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComProStaffChk" id="BPMNShape_LFPSubComProStaffChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="260.0" y="469.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPEndEvent" id="BPMNShape_LFPEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="549.0" y="479.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPAppChange" id="BPMNShape_LFPAppChange">
+        <omgdc:Bounds height="55.0" width="105.0" x="139.0" y="221.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComZqThrMgrChk" id="BPMNShape_LFPSubComZqThrMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="589.0" y="514.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComZqStaffChk" id="BPMNShape_LFPSubComZqStaffChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="139.0" y="514.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComSelThrMgrChk" id="BPMNShape_LFPSubComSelThrMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="445.0" y="301.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComSelStaffChk" id="BPMNShape_LFPSubComSelStaffChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="260.0" y="301.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPAppEndEvent" id="BPMNShape_LFPAppEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="50.0" y="231.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPAppConfirm" id="BPMNShape_LFPAppConfirm">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="469.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPSubComMaxMgrChk" id="BPMNShape_LFPSubComMaxMgrChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="739.0" y="221.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="LFPDeptRepoChk" id="BPMNShape_LFPDeptRepoChk">
+        <omgdc:Bounds height="55.0" width="105.0" x="320.0" y="1.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="208.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="425.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="589.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="641.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="604.0" y="409.0"></omgdi:waypoint>
+        <omgdi:waypoint x="365.0" y="409.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="312.0" y="437.0"></omgdi:waypoint>
+        <omgdi:waypoint x="312.0" y="469.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="372.0" y="166.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="641.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="641.0" y="514.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="589.0" y="541.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="541.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="191.0" y="514.0"></omgdi:waypoint>
+        <omgdi:waypoint x="219.0" y="409.0"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0" y="409.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="191.0" y="221.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="372.0" y="166.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="641.0" y="166.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="641.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="497.0" y="301.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="445.0" y="328.0"></omgdi:waypoint>
+        <omgdi:waypoint x="365.0" y="328.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="312.0" y="356.0"></omgdi:waypoint>
+        <omgdi:waypoint x="312.0" y="381.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="641.0" y="166.0"></omgdi:waypoint>
+        <omgdi:waypoint x="641.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="589.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="244.0" y="248.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="312.0" y="301.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="276.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="191.0" y="514.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="276.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="139.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="85.0" y="248.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="365.0" y="496.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="496.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="505.0" y="496.0"></omgdi:waypoint>
+        <omgdi:waypoint x="549.0" y="496.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="694.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="739.0" y="248.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="791.0" y="221.0"></omgdi:waypoint>
+        <omgdi:waypoint x="765.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="141.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="791.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="646.0" y="303.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="328.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="791.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="378.0"></omgdi:waypoint>
+        <omgdi:waypoint x="365.0" y="409.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="791.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="641.0" y="514.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="641.0" y="166.0"></omgdi:waypoint>
+        <omgdi:waypoint x="356.0" y="264.0"></omgdi:waypoint>
+        <omgdi:waypoint x="312.0" y="469.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="372.0" y="111.0"></omgdi:waypoint>
+        <omgdi:waypoint x="372.0" y="56.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
+        <omgdi:waypoint x="372.0" y="56.0"></omgdi:waypoint>
+        <omgdi:waypoint x="452.0" y="469.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">
+        <omgdi:waypoint x="372.0" y="56.0"></omgdi:waypoint>
+        <omgdi:waypoint x="112.0" y="82.0"></omgdi:waypoint>
+        <omgdi:waypoint x="191.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

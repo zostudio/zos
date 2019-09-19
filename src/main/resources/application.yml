@@ -1,0 +1,78 @@
+server:
+  port: 18080
+spring:
+  application:
+    name: generate
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/activiti?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    username: root
+    password: 01Studio
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  liquibase:
+    enabled: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    property-naming-strategy: SNAKE_CASE
+  devtools:
+    livereload:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        #default_catalog: xinjiang
+        #default_schema: xinjiang
+        temp: 
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        enable_lazy_load_no_trans: true
+  freemarker:
+    cache: false
+    charset: UTF-8
+    content-type: text/plain
+    enabled: true
+    template-loader-path: classpath:/templates
+    suffix: .ftl
+    check-template-location: true
+com:
+  zos:
+    generate:
+       base-package: com.asiainfo.rms.workflow
+       process: common
+       namespace: pages
+       out-uri: F:\qycache
+       table-remove-prefixes: bc_
+       jdbc:
+#         username: zos
+#         password: zos
+#         schema: ZOS
+#         catalog: ZOS
+#         url: jdbc:oracle:thin:@//127.0.0.1:1521/ORCL
+         driver: oracle.jdbc.driver.OracleDriver
+         schema: XINJIANG
+         catalog: XINJIANG
+         username: xinjiang
+         password: xinjiang
+         url: jdbc:oracle:thin:@//10.1.195.102:1521/AIDB
+         #username: root
+         #password: 01Studio
+         #schema: XINJIANG
+         #catalog: XINJIANG
+         #url: jdbc:mysql://127.0.0.1:3306/activiti?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+         #driver: com.mysql.jdbc.Driver
+       type-mappings: [
+         {name: java.sql.Timestamp, value: java.util.Date},
+         {name: java.sql.Date, value: java.util.Date},
+         {name: java.sql.Time, value: java.util.Date},
+         {name: java.lang.Byte, value: Integer},
+         {name: java.lang.Short, value: Integer},
+         {name: java.math.BigDecimal, value: Long},
+       ] 
+logging:
+  config: classpath:logback-spring.xml
+  file: log/${spring.application.name}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="serviceTaskDelegate" name="serviceTaskDelegate" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <serviceTask id="servicetaskA" name="ServiceTaskA" activiti:delegateExpression="${myServiceTaskJavaDelegate}"></serviceTask>
+    <userTask id="UserTaskE" name="UserTaskE"></userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="servicetaskA"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="UserTaskE" targetRef="endevent1"></sequenceFlow>
+    <serviceTask id="ServiceTaskB" name="ServiceTaskB" activiti:expression="${myServiceTaskBean.printf(execution)}"></serviceTask>
+    <serviceTask id="ServiceTaskC" name="ServiceTaskC" activiti:expression="${execution.setVariable('myServiceTaskBean', myServiceTaskBean.name)}"></serviceTask>
+    <sequenceFlow id="flow4" sourceRef="servicetaskA" targetRef="ServiceTaskB"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="ServiceTaskB" targetRef="ServiceTaskC"></sequenceFlow>
+    <serviceTask id="ServiceTaskD" name="ServiceTaskD" activiti:type="shell">
+      <extensionElements>
+        <activiti:field name="command">
+          <activiti:string><![CDATA[cmd]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="arg1">
+          <activiti:string><![CDATA[/c]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="arg2">
+          <activiti:string><![CDATA[echo]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="arg3">
+          <activiti:string><![CDATA[%JAVA_HOME%]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="outputVariable">
+          <activiti:string><![CDATA[javaHome]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow6" sourceRef="ServiceTaskC" targetRef="ServiceTaskD"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="ServiceTaskD" targetRef="UserTaskE"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_serviceTaskDelegate">
+    <bpmndi:BPMNPlane bpmnElement="serviceTaskDelegate" id="BPMNPlane_serviceTaskDelegate">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskA" id="BPMNShape_servicetaskA">
+        <omgdc:Bounds height="55.0" width="105.0" x="221.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskE" id="BPMNShape_UserTaskE">
+        <omgdc:Bounds height="55.0" width="105.0" x="441.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="680.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskB" id="BPMNShape_ServiceTaskB">
+        <omgdc:Bounds height="55.0" width="105.0" x="221.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskC" id="BPMNShape_ServiceTaskC">
+        <omgdc:Bounds height="55.0" width="105.0" x="441.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTaskD" id="BPMNShape_ServiceTaskD">
+        <omgdc:Bounds height="55.0" width="105.0" x="645.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="95.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="546.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="273.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="273.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="326.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="441.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="546.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="645.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="697.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="493.0" y="205.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
