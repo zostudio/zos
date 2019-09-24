@@ -81,12 +81,12 @@ public class ${className}ServiceImpl implements I${className}Service {
 	@Override
 	public ${className}BO update(${className}BO ${classNameLower}BO) throws Exception {
 		BO${className} bo${className} = ${className}Mapper.INSTANCE.boToDomain(${classNameLower}BO);
-		StringBuffer sql = new StringBuffer("UPDATE ${table.sqlName} SET ");
+		StringBuffer hqlCondition = new StringBuffer("UPDATE ${table.sqlName} SET ");
 		Map<String, Object> param = new HashMap<String, Object>();
 		<#list table.columns as column>
 		    <#if column.isNumberColumn>
 	    if (${classNameLower}BO.get${column.columnName}() != null) {
-			sql.append(" ${column.sqlName} = :${column.columnNameLower}, ");
+			hqlCondition.append(" ${column.sqlName} = :${column.columnNameLower}, ");
 			param.put("${column.columnNameLower}", ${classNameLower}BO.get${column.columnName}());
 		}
 	    	<#elseif column.isDateTimeColumn>
@@ -108,7 +108,7 @@ public class ${className}ServiceImpl implements I${className}Service {
 		}
 			</#if>
 		</#list>
-		sql = sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
+		hqlCondition = hqlCondition.replace(sql.toString().lastIndexOf(","), hqlCondition.toString().lastIndexOf(",") + 1, "");
 		<#if (table.pkColumn)??>
 		hqlCondition.append(" WHERE ${table.pkColumn.sqlName}=" + ${classNameLower}BO.get${table.pkColumn.columnName}());
 		<#else>
@@ -118,7 +118,7 @@ public class ${className}ServiceImpl implements I${className}Service {
 			</#if>
 		</#list>
 		</#if>
-		commonDAO.updateBySql(sql.toString(), param);
+		commonDAO.updateBySql(hqlCondition.toString(), param);
 		<#if (table.pkColumn)??>
 		bo${className} = commonDAO.findById(BO${className}.class, ${classNameLower}BO.get${table.pkColumn.columnName}());
 		<#else>

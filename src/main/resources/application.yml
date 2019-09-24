@@ -42,7 +42,7 @@ spring:
 com:
   zos:
     generate:
-       base-package: com.asiainfo.rms.workflow
+       base-package: com.zos.activiti
        process: common
        namespace: pages
        out-uri: F:\qycache
