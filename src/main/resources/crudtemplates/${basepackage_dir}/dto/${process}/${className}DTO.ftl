@@ -2,7 +2,7 @@
 <#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
-package ${basepackage}.dto.process.${process};
+package ${basepackage}.dto.${process};
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

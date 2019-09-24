@@ -2,7 +2,7 @@
 <#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
-package ${basepackage}.bo.process.${process};
+package ${basepackage}.bo.${process};
 
 /**
  * ${tableRemarks}

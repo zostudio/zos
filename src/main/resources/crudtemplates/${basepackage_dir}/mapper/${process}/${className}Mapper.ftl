@@ -4,7 +4,7 @@
 <#assign dateTimeColumnCount = table.dateTimeColumnCount>
 <#assign classNameLower = className?uncap_first>
 <#assign outputDateTimeColumnCount = 0>
-package ${basepackage}.mapper.process.${process};
+package ${basepackage}.mapper.${process};
 
 import java.util.List;
 

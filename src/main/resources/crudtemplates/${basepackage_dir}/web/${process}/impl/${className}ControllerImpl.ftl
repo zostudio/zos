@@ -2,7 +2,7 @@
 <#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
-package ${basepackage}.web.process.${process}.impl;
+package ${basepackage}.web.${process}.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

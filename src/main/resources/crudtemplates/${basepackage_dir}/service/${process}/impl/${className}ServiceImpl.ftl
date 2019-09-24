@@ -2,7 +2,7 @@
 <#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
-package ${basepackage}.service.process.${process}.impl;
+package ${basepackage}.service.${process}.impl;
 
 import java.io.File;
 import java.util.ArrayList;
