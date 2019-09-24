@@ -45,21 +45,21 @@ public class ${className}QueryPageDTO {
 	<#list table.columns as column>
 	<#if column.isDateTimeColumn>
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}(开始)")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}(开始)")
 	private String ${column.sqlName?lower_case}_begin;
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}(结束)")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}(结束)")
 	private String ${column.sqlName?lower_case}_end;
 	<#elseif column.isNumberColumn>
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}(开始)")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}(开始)")
 	private ${column.javaType} ${column.sqlName?lower_case}_begin;
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}(结束)")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}(结束)")
 	private ${column.javaType} ${column.sqlName?lower_case}_end;
 	<#else>
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}")
 	private ${column.javaType} ${column.sqlName?lower_case};
 	</#if>
 	</#list>

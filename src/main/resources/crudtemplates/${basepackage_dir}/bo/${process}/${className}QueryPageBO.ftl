@@ -1,5 +1,5 @@
 <#assign className = table.className>
-<#assign tableRemarks = table.remarks?default("")>
+<#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
 package ${basepackage}.bo.process.${process};
@@ -46,18 +46,18 @@ public class ${className}QueryPageBO {
 	<#if column.isDateTimeColumn || column.isNumberColumn>
 	
 	/**
-	 * ${column.remarks?default("")}(开始)
+	 * ${column.remarks?default("暂无数据注释(${column_index})")}(开始)
 	 */
 	private ${column.javaType} ${column.columnNameLower}Begin;
 	
 	/**
-	 * ${column.remarks?default("")}(结束)
+	 * ${column.remarks?default("暂无数据注释(${column_index})")}(结束)
 	 */
 	private ${column.javaType} ${column.columnNameLower}End;
 	<#else>
 	
 	/**
-	 * ${column.remarks?default("")}
+	 * ${column.remarks?default("暂无数据注释(${column_index})")}
 	 */
 	private ${column.javaType} ${column.columnNameLower};
 	</#if>

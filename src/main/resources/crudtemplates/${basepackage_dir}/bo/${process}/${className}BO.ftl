@@ -1,5 +1,5 @@
 <#assign className = table.className>
-<#assign tableRemarks = table.remarks?default("")>
+<#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
 package ${basepackage}.bo.process.${process};
@@ -19,7 +19,7 @@ public class ${className}BO {
 	<#list table.columns as column>
 	
 	/**
-	 * ${column.remarks?default("")}
+	 * ${column.remarks?default("暂无数据注释(${column_index})")}
 	 */
 	private ${column.javaType} ${column.columnNameLower};
 	</#list>

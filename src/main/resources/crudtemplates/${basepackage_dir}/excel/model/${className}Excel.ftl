@@ -1,5 +1,5 @@
 <#assign className = table.className>
-<#assign tableRemarks = table.remarks?default("")>
+<#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
 package ${basepackage}.excel.model;
@@ -23,12 +23,12 @@ public class ${className}Excel implements Serializable {
 	<#list table.columns as column>
 		<#if column.pk>
 	
-	// @Excel(name = "${column.remarks?default("")}", orderNum = "${column_index}", width=18)
+	// @Excel(name = "${column.remarks?default("暂无数据注释(${column_index})")}", orderNum = "${column_index}", width=18)
 	private ${column.javaType} ${column.columnNameLower};
 		</#if>
 		<#if !column.pk>
 	
-	@Excel(name = "${column.remarks?default("")}", orderNum = "${column_index - 1}", width=18)
+	@Excel(name = "${column.remarks?default("暂无数据注释(${column_index})")}", orderNum = "${column_index - 1}", width=18)
 	private ${column.javaType} ${column.columnNameLower};
 		</#if>
 	</#list>

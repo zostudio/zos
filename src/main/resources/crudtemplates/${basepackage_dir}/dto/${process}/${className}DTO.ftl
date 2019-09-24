@@ -1,5 +1,5 @@
 <#assign className = table.className>
-<#assign tableRemarks = table.remarks?default("")>
+<#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign classNameLower = className?uncap_first>
 package ${basepackage}.dto.process.${process};
@@ -22,7 +22,7 @@ public class ${className}DTO {
 <#macro generateFields>
 	<#list table.columns as column>
 	
-	@ApiModelProperty(value = "${column.remarks?default("")}")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}")
 	private ${column.javaType} ${column.columnNameLower};
 	</#list>
 </#macro>

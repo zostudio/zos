@@ -1,5 +1,5 @@
 <#assign className = table.className>
-<#assign tableRemarks = table.remarks?default("")>
+<#assign tableRemarks = table.remarks?default("暂无表注释")>
 <#assign hasDateTimeColumn = table.hasDateTimeColumn>
 <#assign hasStringColumn = table.hasStringColumn>
 <#assign classNameLower = className?uncap_first>
@@ -39,7 +39,7 @@ public class BO${className} {
 
 <#macro generateFields>
 	<#list table.columns as column>
-	// ${column.remarks?default("")}
+	// ${column.remarks?default("暂无数据注释(${column_index})")}
 	${column.hibernateValidatorExprssion}
 	private ${column.javaType} ${column.columnNameLower};
 	</#list>
