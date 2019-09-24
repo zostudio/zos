@@ -43,7 +43,7 @@ com:
   zos:
     generate:
        base-package: com.zos.activiti
-       process: common
+       process: stakeholder
        namespace: pages
        out-uri: F:\qycache
        table-remove-prefixes: bc_
