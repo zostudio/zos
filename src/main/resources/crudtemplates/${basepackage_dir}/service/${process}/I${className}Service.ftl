@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.asiainfo.rms.core.api.Page;
-import ${basepackage}.bo.process.${process}.${className}BO;
-import ${basepackage}.bo.process.${process}.${className}QueryPageBO;
-import ${basepackage}.dto.process.${process}.${className}DTO;
+import ${basepackage}.bo.${process}.${className}BO;
+import ${basepackage}.bo.${process}.${className}QueryPageBO;
+import ${basepackage}.dto.common.Page;
+import ${basepackage}.dto.${process}.${className}DTO;
 
 /**
  * ${tableRemarks}

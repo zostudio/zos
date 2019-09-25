@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.asiainfo.rms.core.api.Page;
-import ${basepackage}.bo.process.${process}.${className}BO;
+import ${basepackage}.bo.${process}.${className}BO;
 import ${basepackage}.dto.common.ExecuteResultDTO;
-import ${basepackage}.dto.process.${process}.${className}DTO;
-import ${basepackage}.dto.process.${process}.${className}QueryPageDTO;
-import ${basepackage}.mapper.process.${process}.${className}Mapper;
-import ${basepackage}.service.process.${process}.I${className}Service;
-import ${basepackage}.web.process.${process}.I${className}Controller;
+import ${basepackage}.dto.common.Page;
+import ${basepackage}.dto.${process}.${className}DTO;
+import ${basepackage}.dto.${process}.${className}QueryPageDTO;
+import ${basepackage}.mapper.${process}.${className}Mapper;
+import ${basepackage}.service.${process}.I${className}Service;
+import ${basepackage}.web.${process}.I${className}Controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,14 +43,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Api(value = "${tableRemarks}增删改查操作接口(流程无关)")
+@Api(value = "${tableRemarks}增删改查操作接口")
 public class ${className}ControllerImpl implements I${className}Controller {
 	
 	@Autowired
 	private I${className}Service ${classNameLower}Service;
 
 	@Override
-	@ApiOperation(value = "依据主键删除${tableRemarks}(流程无关)")
+	@ApiOperation(value = "依据主键删除${tableRemarks}")
 	<#if (table.pkColumn)??>
 	public void deleteByPrimaryKey(@PathVariable ${table.pkColumn.javaType} ${table.pkColumn.columnNameLower}) throws Exception {
 		${classNameLower}Service.deleteByPrimaryKey(${table.pkColumn.columnNameLower});
@@ -65,7 +65,7 @@ public class ${className}ControllerImpl implements I${className}Controller {
 	}
 	
 	@Override
-	@ApiOperation(value = "新增${tableRemarks}(流程无关)")
+	@ApiOperation(value = "新增${tableRemarks}")
 	public ExecuteResultDTO save(@RequestBody ${className}DTO ${classNameLower}DTO) throws Exception {
 		ExecuteResultDTO result = new ExecuteResultDTO();
 		${classNameLower}DTO = ${className}Mapper.INSTANCE.boToDto(${classNameLower}Service.save(${className}Mapper.INSTANCE.dtoToBo(${classNameLower}DTO)));
@@ -86,7 +86,7 @@ public class ${className}ControllerImpl implements I${className}Controller {
 	}
 	
 	@Override
-	@ApiOperation(value = "依据主键查询${tableRemarks}(流程无关)")
+	@ApiOperation(value = "依据主键查询${tableRemarks}")
 	<#if (table.pkColumn)??>
 	public ExecuteResultDTO findByPrimaryKey(@PathVariable ${table.pkColumn.javaType} ${table.pkColumn.columnNameLower}) throws Exception {
 		ExecuteResultDTO result = new ExecuteResultDTO();
@@ -107,7 +107,7 @@ public class ${className}ControllerImpl implements I${className}Controller {
 	}
 	
 	@Override
-	@ApiOperation(value = "更新${tableRemarks}(流程无关)")
+	@ApiOperation(value = "更新${tableRemarks}")
 	public ExecuteResultDTO update(@RequestBody ${className}DTO ${classNameLower}DTO) throws Exception {
 		ExecuteResultDTO result = new ExecuteResultDTO();
 		${classNameLower}DTO = ${className}Mapper.INSTANCE.boToDto(${classNameLower}Service.update(${className}Mapper.INSTANCE.dtoToBo(${classNameLower}DTO)));
@@ -128,7 +128,7 @@ public class ${className}ControllerImpl implements I${className}Controller {
 	}
 	
 	@Override
-	@ApiOperation(value = "分页查询${tableRemarks}(流程无关)")
+	@ApiOperation(value = "分页查询${tableRemarks}")
 	public ExecuteResultDTO findByConds(${className}QueryPageDTO ${classNameLower}QueryPageDTO) throws Exception {
 		ExecuteResultDTO result = new ExecuteResultDTO();
 		Page<${className}BO> ${classNameLower}BOs = ${classNameLower}Service.findByConds(${className}Mapper.INSTANCE.dtoToBo(${classNameLower}QueryPageDTO));
@@ -139,14 +139,14 @@ public class ${className}ControllerImpl implements I${className}Controller {
 	}
 
 	@Override
-	@ApiOperation(value = "导出EXCEL")
+	@ApiOperation(value = "导出${tableRemarks}")
 	public void downExcelByConds(${className}QueryPageDTO ${classNameLower}QueryPageDTO,
 			HttpServletResponse response) throws Exception {
 		${classNameLower}Service.downExcelByConds(${className}Mapper.INSTANCE.dtoToBo(${classNameLower}QueryPageDTO), response);
 	}
 
 	@Override
-	@ApiOperation(value = "导入EXCEL")
+	@ApiOperation(value = "导入${tableRemarks}")
 	public ExecuteResultDTO importExcel(MultipartFile file) throws Exception {
 		ExecuteResultDTO resultDTO = new ExecuteResultDTO();
 		StringBuffer msg = new StringBuffer();

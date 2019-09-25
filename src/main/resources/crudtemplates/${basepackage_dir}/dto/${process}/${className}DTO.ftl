@@ -22,7 +22,7 @@ public class ${className}DTO {
 <#macro generateFields>
 	<#list table.columns as column>
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释(${column_index})")}")
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private ${column.javaType} ${column.columnNameLower};
 	</#list>
 </#macro>

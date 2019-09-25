@@ -19,16 +19,16 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.asiainfo.rms.core.api.Page;
-import ${basepackage}.bo.process.${process}.${className}BO;
-import ${basepackage}.bo.process.${process}.${className}QueryPageBO;
-import ${basepackage}.dao.CommonDAO;
+import ${basepackage}.bo.${process}.${className}BO;
+import ${basepackage}.bo.${process}.${className}QueryPageBO;
+import ${basepackage}.dao.stakeholder.${className}DAO;
 import ${basepackage}.domain.${process}.BO${className};
-import ${basepackage}.dto.process.${process}.${className}DTO;
+import ${basepackage}.dto.common.Page;
+import ${basepackage}.dto.${process}.${className}DTO;
 import ${basepackage}.excel.model.${className}Excel;
-import com.asiainfo.rms.workflow.excel.util.GenerateExport;
-import ${basepackage}.mapper.process.${process}.${className}Mapper;
-import ${basepackage}.service.process.${process}.I${className}Service;
+import ${basepackage}.excel.util.GenerateExport;
+import ${basepackage}.mapper.${process}.${className}Mapper;
+import ${basepackage}.service.${process}.I${className}Service;
 
 /**
  * ${tableRemarks}
@@ -40,17 +40,17 @@ import ${basepackage}.service.process.${process}.I${className}Service;
 public class ${className}ServiceImpl implements I${className}Service {
 	
 	@Autowired
-	private CommonDAO commonDAO;
+	private ${className}DAO ${classNameLower}DAO;
 	
 	@Override
 	<#if (table.pkColumn)??>
 	public void deleteByPrimaryKey(${table.pkColumn.javaType} ${table.pkColumn.columnNameLower}) throws Exception {
-		commonDAO.delete(${table.pkColumn.columnNameLower}, BO${className}.class);
+		${classNameLower}DAO.delete(${table.pkColumn.columnNameLower}, BO${className}.class);
 	<#else>
 	<#list table.columns as column>
     	<#if table.pkCount==0 && column_index==0>
 	public void deleteByPrimaryKey(${column.javaType} ${column.columnNameLower}) throws Exception {
-		commonDAO.delete(${column.columnNameLower}, BO${className}.class);
+		${classNameLower}DAO.delete(${column.columnNameLower}, BO${className}.class);
 		</#if>
 	</#list>
 	</#if>
@@ -59,19 +59,19 @@ public class ${className}ServiceImpl implements I${className}Service {
 	@Override
 	public ${className}BO save(${className}BO ${classNameLower}BO) throws Exception {
 		BO${className} bo${className} = ${className}Mapper.INSTANCE.boToDomain(${classNameLower}BO);
-		bo${className} = commonDAO.saveOrUpdate(bo${className}, BO${className}.class);
+		bo${className} = ${classNameLower}DAO.saveOrUpdate(bo${className}, BO${className}.class);
 		return ${className}Mapper.INSTANCE.domainToBo(bo${className});
 	}
 	
 	@Override
 	<#if (table.pkColumn)??>
 	public ${className}BO findByPrimaryKey(${table.pkColumn.javaType} ${table.pkColumn.columnNameLower}) throws Exception{
-		BO${className} bo${className} = commonDAO.findById(BO${className}.class, ${table.pkColumn.columnNameLower});
+		BO${className} bo${className} = ${classNameLower}DAO.findById(BO${className}.class, ${table.pkColumn.columnNameLower});
 	<#else>
 	<#list table.columns as column>
     	<#if table.pkCount==0 && column_index==0>
 	public ${className}BO findByPrimaryKey(${column.javaType} ${column.columnNameLower}) throws Exception {
-		BO${className} bo${className} = commonDAO.findById(BO${className}.class, ${column.columnNameLower});
+		BO${className} bo${className} = ${classNameLower}DAO.findById(BO${className}.class, ${column.columnNameLower});
 		</#if>
 	</#list>
 	</#if>
@@ -108,7 +108,7 @@ public class ${className}ServiceImpl implements I${className}Service {
 		}
 			</#if>
 		</#list>
-		hqlCondition = hqlCondition.replace(sql.toString().lastIndexOf(","), hqlCondition.toString().lastIndexOf(",") + 1, "");
+		hqlCondition = hqlCondition.replace(hqlCondition.toString().lastIndexOf(","), hqlCondition.toString().lastIndexOf(",") + 1, "");
 		<#if (table.pkColumn)??>
 		hqlCondition.append(" WHERE ${table.pkColumn.sqlName}=" + ${classNameLower}BO.get${table.pkColumn.columnName}());
 		<#else>
@@ -118,13 +118,13 @@ public class ${className}ServiceImpl implements I${className}Service {
 			</#if>
 		</#list>
 		</#if>
-		commonDAO.updateBySql(hqlCondition.toString(), param);
+		${classNameLower}DAO.deleteOrUpdateBySql(hqlCondition.toString(), param);
 		<#if (table.pkColumn)??>
-		bo${className} = commonDAO.findById(BO${className}.class, ${classNameLower}BO.get${table.pkColumn.columnName}());
+		bo${className} = ${classNameLower}DAO.findById(BO${className}.class, ${classNameLower}BO.get${table.pkColumn.columnName}());
 		<#else>
 		<#list table.columns as column>
 	    	<#if table.pkCount==0 && column_index==0>
-		bo${className} = commonDAO.findById(BO${className}.class, ${classNameLower}BO.get${column.columnName}());
+		bo${className} = ${classNameLower}DAO.findById(BO${className}.class, ${classNameLower}BO.get${column.columnName}());
 			</#if>
 		</#list>
 		</#if>
@@ -132,7 +132,6 @@ public class ${className}ServiceImpl implements I${className}Service {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Page<${className}BO> findByConds(${className}QueryPageBO ${classNameLower}QueryPageBO) throws Exception {
 		StringBuffer hql = new StringBuffer("SELECT o FROM BO${className} o WHERE 1 = 1");
 		StringBuffer hqlCount = new StringBuffer("SELECT COUNT(o) FROM BO${className} o WHERE 1 = 1");
@@ -186,15 +185,15 @@ public class ${className}ServiceImpl implements I${className}Service {
 		List<BO${className}> bo${className}s = null;
 		Page<${className}BO> page = new Page<${className}BO>();
 		if ((${classNameLower}QueryPageBO.getPageNo() != null && ${classNameLower}QueryPageBO.getPageNo().compareTo(0) > 0) && (${classNameLower}QueryPageBO.getPageSize() != null && ${classNameLower}QueryPageBO.getPageSize().compareTo(0) > 0)) {
-			Long count = (Long) commonDAO.findSingleResultByJPAQL(hqlCount.toString(), param);
+			Long count = (Long) ${classNameLower}DAO.findSingleResultByJPAQL(hqlCount.toString(), param);
 			if (count == null || count.compareTo(0L) <= 0) {
 				return page;
 			}
 			page.setRowCount(count.intValue());
-			bo${className}s = commonDAO.findByJPAQL(hql.toString(), param, ${classNameLower}QueryPageBO.getPageNo(), ${classNameLower}QueryPageBO.getPageSize());
+			bo${className}s = ${classNameLower}DAO.findByJPAQL(hql.toString(), param, ${classNameLower}QueryPageBO.getPageNo(), ${classNameLower}QueryPageBO.getPageSize());
 			page.generatePageCount(${classNameLower}QueryPageBO.getPageSize());
 		} else {
-			bo${className}s = commonDAO.findByJPAQL(hql.toString(), param);
+			bo${className}s = ${classNameLower}DAO.findByJPAQL(hql.toString(), param);
 		}
 		page.setPageData(${className}Mapper.INSTANCE.domainToBo(bo${className}s));
 		return page;
@@ -216,7 +215,7 @@ public class ${className}ServiceImpl implements I${className}Service {
 		try{
 			excellist = GenerateExport.formulaImportExcel(file, 0, 1, ${className}Excel.class);
 			List<${className}BO> boList = ${className}Mapper.INSTANCE.excelToBo(excellist);
-			int i = 1;
+			Integer i = 1;
  			for(${className}BO bo : boList){
 				StringBuffer rowErrorMsg = new StringBuffer("");
 				if (this.verify(bo, rowErrorMsg)) {
@@ -263,18 +262,19 @@ public class ${className}ServiceImpl implements I${className}Service {
 			throw new Exception("无法获取文件名称");
 		}
 		${className}QueryPageBO ${classNameLower}QueryPageBO = new ${className}QueryPageBO();
-		${classNameLower}QueryPageBO.setYear(fileName);
+		// TODO 此处添加批量标识
+		// ${classNameLower}QueryPageBO.setYear(fileName);
 		Page<${className}BO> page = this.findByConds(${classNameLower}QueryPageBO);
 		if (!CollectionUtils.isEmpty(page.getPageData())) {
 			for (${className}BO ${classNameLower}BO : page.getPageData()) {
-				this.deleteByPrimaryKey(${classNameLower}BO.get<#list table.columns as column><#if column.pk>${column.columnName}()</#if></#list>);
+				this.deleteByPrimaryKey(${classNameLower}BO.get<#if (table.pkColumn)??><#list table.columns as column><#if column.pk>${column.columnName}</#if></#list><#else><#list table.columns as column><#if !column.pk><#if table.pkCount==0 && column_index==0>${column.columnName}</#if></#if></#list></#if>());
 			}
 		}
 		List<${className}Excel> excellist = null;
 		try{
 			excellist = GenerateExport.importExcel(file, 0, 1, ${className}Excel.class);
 			List<${className}BO> boList = ${className}Mapper.INSTANCE.excelToBo(excellist);
-			int i = 1;
+			Integer i = 1;
 			for (${className}BO bo : boList) {
 				StringBuffer rowErrorMsg = new StringBuffer("");
 				if (!this.verify(bo, rowErrorMsg)) {

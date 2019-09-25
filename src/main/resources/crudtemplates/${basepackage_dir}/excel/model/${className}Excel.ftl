@@ -23,12 +23,12 @@ public class ${className}Excel implements Serializable {
 	<#list table.columns as column>
 		<#if column.pk>
 	
-	// @Excel(name = "${column.remarks?default("暂无数据注释(${column_index})")}", orderNum = "${column_index}", width=18)
+	// @Excel(name = "${column.remarks?default("暂无数据注释[${column_index}]")}", orderNum = "${column_index}", width=18)
 	private ${column.javaType} ${column.columnNameLower};
 		</#if>
 		<#if !column.pk>
 	
-	@Excel(name = "${column.remarks?default("暂无数据注释(${column_index})")}", orderNum = "${column_index - 1}", width=18)
+	@Excel(name = "${column.remarks?default("暂无数据注释[${column_index}]")}", orderNum = "${column_index - 1}", width=18)
 	private ${column.javaType} ${column.columnNameLower};
 		</#if>
 	</#list>

@@ -13,12 +13,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import com.asiainfo.rms.core.api.Page;
-import ${basepackage}.bo.process.${process}.${className}BO;
-import ${basepackage}.bo.process.${process}.${className}QueryPageBO;
+import ${basepackage}.bo.${process}.${className}BO;
+import ${basepackage}.bo.${process}.${className}QueryPageBO;
 import ${basepackage}.domain.${process}.BO${className};
-import ${basepackage}.dto.process.${process}.${className}DTO;
-import ${basepackage}.dto.process.${process}.${className}QueryPageDTO;
+import ${basepackage}.dto.common.Page;
+import ${basepackage}.dto.${process}.${className}DTO;
+import ${basepackage}.dto.${process}.${className}QueryPageDTO;
 import ${basepackage}.excel.model.${className}Excel;
 
 /**

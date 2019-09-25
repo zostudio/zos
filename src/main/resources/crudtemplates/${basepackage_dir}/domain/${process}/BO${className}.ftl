@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 </#if>
+import javax.validation.constraints.NotNull;
 
 <#if hasStringColumn>
 import org.hibernate.validator.constraints.Length;
@@ -39,7 +40,7 @@ public class BO${className} {
 
 <#macro generateFields>
 	<#list table.columns as column>
-	// ${column.remarks?default("暂无数据注释(${column_index})")}
+	// ${column.remarks?default("暂无数据注释[${column_index}]")}
 	${column.hibernateValidatorExprssion}
 	private ${column.javaType} ${column.columnNameLower};
 	</#list>

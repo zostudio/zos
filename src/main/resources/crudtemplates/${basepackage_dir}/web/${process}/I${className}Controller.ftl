@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import ${basepackage}.dto.common.ExecuteResultDTO;
-import ${basepackage}.dto.process.${process}.${className}DTO;
-import ${basepackage}.dto.process.${process}.${className}QueryPageDTO;
+import ${basepackage}.dto.${process}.${className}DTO;
+import ${basepackage}.dto.${process}.${className}QueryPageDTO;
 
 /**
  * ${tableRemarks}
  * 
  * @author 01Studio
  */
-@RequestMapping("/process/${process}/${classNameLower?lower_case}")
+@RequestMapping("/${process}/${classNameLower?lower_case}")
 public interface I${className}Controller {
 
 	<#if (table.pkColumn)??>
@@ -60,10 +60,10 @@ public interface I${className}Controller {
 	@GetMapping
 	public ExecuteResultDTO findByConds(${className}QueryPageDTO ${classNameLower}QueryPageDTO) throws Exception;
 	
-	@GetMapping(value = "/downExcel")
+	@GetMapping(value = "/download/excel")
 	public void downExcelByConds(${className}QueryPageDTO ${classNameLower}QueryPageDTO, HttpServletResponse response) throws Exception;
 
-	@PostMapping(value = "/importExcel")
+	@PostMapping(value = "/import/excel")
 	public ExecuteResultDTO importExcel(MultipartFile file) throws Exception;
 	
 }
