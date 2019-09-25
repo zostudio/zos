@@ -4,23 +4,23 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 暂无表注释
  * 
- * 
- * @author joker
+ * @author 01Studio
  */
-@ApiModel(description = "")
+@ApiModel(description = "暂无表注释")
 public class WorkflowTemplateDTO {
 	
-	@ApiModelProperty(value = "模板主键")
+	@ApiModelProperty(value = "流程模版主键", example = "0")
 	private java.lang.Long templateId;
 	
-	@ApiModelProperty(value = "流程主键")
+	@ApiModelProperty(value = "流程唯一标识", example = "String")
 	private java.lang.String processKey;
 	
-	@ApiModelProperty(value = "流程类型")
+	@ApiModelProperty(value = "流程唯一代码", example = "String")
 	private java.lang.String objType;
 	
-	@ApiModelProperty(value = "流程名称")
+	@ApiModelProperty(value = "流程唯一名称", example = "String")
 	private java.lang.String processName;
 	
 	public void setTemplateId(java.lang.Long value) {
@@ -29,7 +29,7 @@ public class WorkflowTemplateDTO {
 	
 	public java.lang.Long getTemplateId() {
 		return this.templateId;
-	}	    
+	}
 	
 	public java.lang.String getProcessKey() {
 		return this.processKey;

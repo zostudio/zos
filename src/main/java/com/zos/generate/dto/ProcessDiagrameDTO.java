@@ -14,10 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "流程生成模型")
 public class ProcessDiagrameDTO {
 	
-	@ApiModelProperty(value = "流程配置")
+	@ApiModelProperty(value = "流程配置", example = "")
 	private List<WorkflowDTO> workflowDTOs;
 
-	@ApiModelProperty(value = "流程模版")
+	@ApiModelProperty(value = "流程模版", example = "")
 	private WorkflowTemplateDTO workflowTemplateDTO;
 
 	public List<WorkflowDTO> getWorkflowDTOs() {

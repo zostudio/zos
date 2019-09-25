@@ -16,9 +16,9 @@ import lombok.Data;
 @ApiModel(description = "流程生成模型")
 public class ProcessGenerateDTO {
 	
-	@ApiModelProperty(value = "流程业务表名称")
+	@ApiModelProperty(value = "流程业务表名称", example = "")
 	private List<String> tableNames;
 
-	@ApiModelProperty(value = "流程图文件名称")
+	@ApiModelProperty(value = "流程图文件名称", example = "")
 	private String fileName;
 }

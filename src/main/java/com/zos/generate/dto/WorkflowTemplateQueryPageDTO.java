@@ -4,33 +4,34 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 暂无表注释
  * 
- * 
- * @author joker
+ * @author 01Studio
  */
-@ApiModel(description = "")
+@ApiModel(description = "暂无表注释")
 public class WorkflowTemplateQueryPageDTO {
 	
-	@ApiModelProperty(value = "(开始)")
+	@ApiModelProperty(value = "流程模版主键(开始)", example = "0")
 	private java.lang.Long template_id_begin;
 	
-	@ApiModelProperty(value = "(结束)")
+	@ApiModelProperty(value = "流程模版主键(结束)", example = "0")
 	private java.lang.Long template_id_end;
 	
-	@ApiModelProperty(value = "流程主键")
+	@ApiModelProperty(value = "流程唯一标识", example = "String")
 	private java.lang.String process_key;
 	
-	@ApiModelProperty(value = "流程类型")
+	@ApiModelProperty(value = "流程唯一代码", example = "String")
 	private java.lang.String obj_type;
 	
-	@ApiModelProperty(value = "流程名称")
+	@ApiModelProperty(value = "流程唯一名称", example = "String")
 	private java.lang.String process_name;
 	
-	@ApiModelProperty(value = "分页页码")
+	@ApiModelProperty(value = "分页页码", example = "1")
 	private Integer page_no;
 	
-	@ApiModelProperty(value = "分页步长")
+	@ApiModelProperty(value = "分页步长", example = "20")
 	private Integer page_size;
+	
 	public java.lang.Long getTemplate_id_begin() {
 		return this.template_id_begin;
 	}

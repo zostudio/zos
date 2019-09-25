@@ -6,51 +6,51 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * 流程模版
  * 
- * @author joker
+ * @author 01Studio
  */
 @ApiModel(description = "流程模版")
 public class WorkflowDTO {
 	
-	@ApiModelProperty(value = "模版项ID")
+	@ApiModelProperty(value = "模版项ID", example = "0")
 	private java.lang.Long wfItemId;
 	
-	@ApiModelProperty(value = "流程模版主键")
+	@ApiModelProperty(value = "流程模版主键", example = "String")
 	private java.lang.String processKey;
 	
-	@ApiModelProperty(value = "阶段编号")
+	@ApiModelProperty(value = "阶段编号", example = "String")
 	private java.lang.String phaseId;
 	
-	@ApiModelProperty(value = "阶段名称")
+	@ApiModelProperty(value = "阶段名称", example = "String")
 	private java.lang.String phaseName;
 	
-	@ApiModelProperty(value = "任务名称")
+	@ApiModelProperty(value = "任务名称", example = "String")
 	private java.lang.String vmTaskName;
 	
-	@ApiModelProperty(value = "任务编号")
+	@ApiModelProperty(value = "任务编号", example = "String")
 	private java.lang.String vmTaskNo;
 	
-	@ApiModelProperty(value = "环节ID")
+	@ApiModelProperty(value = "环节ID", example = "0")
 	private java.lang.Long linkId;
 	
-	@ApiModelProperty(value = "环节编号")
+	@ApiModelProperty(value = "环节编号", example = "String")
 	private java.lang.String linkNo;
 	
-	@ApiModelProperty(value = "环节类型")
+	@ApiModelProperty(value = "环节类型", example = "String")
 	private java.lang.String linkNoType;
 	
-	@ApiModelProperty(value = "权限ID")
+	@ApiModelProperty(value = "权限ID", example = "String")
 	private java.lang.String roleCode;
 	
-	@ApiModelProperty(value = "页面链接")
+	@ApiModelProperty(value = "页面链接", example = "String")
 	private java.lang.String linkUrl;
 	
-	@ApiModelProperty(value = "是否打单")
+	@ApiModelProperty(value = "是否打单", example = "0")
 	private java.lang.Boolean isPrint;
 	
-	@ApiModelProperty(value = "是否可以回退")
+	@ApiModelProperty(value = "是否可以回退", example = "String")
 	private java.lang.String canBack;
 	
-	@ApiModelProperty(value = "回退按钮")
+	@ApiModelProperty(value = "回退按钮", example = "String")
 	private java.lang.String backBtn;
 	
 	public void setWfItemId(java.lang.Long value) {
@@ -59,7 +59,7 @@ public class WorkflowDTO {
 	
 	public java.lang.Long getWfItemId() {
 		return this.wfItemId;
-	}	    
+	}
 	
 	public java.lang.String getProcessKey() {
 		return this.processKey;

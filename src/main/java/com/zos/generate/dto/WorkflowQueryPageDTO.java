@@ -6,64 +6,65 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * 流程模版
  * 
- * @author joker
+ * @author 01Studio
  */
 @ApiModel(description = "流程模版")
 public class WorkflowQueryPageDTO {
 	
-	@ApiModelProperty(value = "模版项ID(开始)")
+	@ApiModelProperty(value = "模版项ID(开始)", example = "0")
 	private java.lang.Long wf_item_id_begin;
 	
-	@ApiModelProperty(value = "模版项ID(结束)")
+	@ApiModelProperty(value = "模版项ID(结束)", example = "0")
 	private java.lang.Long wf_item_id_end;
 	
-	@ApiModelProperty(value = "流程模版主键")
+	@ApiModelProperty(value = "流程模版主键", example = "String")
 	private java.lang.String process_key;
 	
-	@ApiModelProperty(value = "阶段编号")
+	@ApiModelProperty(value = "阶段编号", example = "String")
 	private java.lang.String phase_id;
 	
-	@ApiModelProperty(value = "阶段名称")
+	@ApiModelProperty(value = "阶段名称", example = "String")
 	private java.lang.String phase_name;
 	
-	@ApiModelProperty(value = "任务名称")
+	@ApiModelProperty(value = "任务名称", example = "String")
 	private java.lang.String vm_task_name;
 	
-	@ApiModelProperty(value = "任务编号")
+	@ApiModelProperty(value = "任务编号", example = "String")
 	private java.lang.String vm_task_no;
 	
-	@ApiModelProperty(value = "环节ID(开始)")
+	@ApiModelProperty(value = "环节ID(开始)", example = "0")
 	private java.lang.Long link_id_begin;
 	
-	@ApiModelProperty(value = "环节ID(结束)")
+	@ApiModelProperty(value = "环节ID(结束)", example = "0")
 	private java.lang.Long link_id_end;
 	
-	@ApiModelProperty(value = "环节编号")
+	@ApiModelProperty(value = "环节编号", example = "String")
 	private java.lang.String link_no;
 	
-	@ApiModelProperty(value = "环节类型")
+	@ApiModelProperty(value = "环节类型", example = "String")
 	private java.lang.String link_no_type;
 	
-	@ApiModelProperty(value = "权限ID")
+	@ApiModelProperty(value = "权限ID", example = "String")
 	private java.lang.String role_code;
 	
-	@ApiModelProperty(value = "页面链接")
+	@ApiModelProperty(value = "页面链接", example = "String")
 	private java.lang.String link_url;
 	
-	@ApiModelProperty(value = "是否打单")
+	@ApiModelProperty(value = "是否打单", example = "0")
 	private java.lang.Boolean is_print;
 	
-	@ApiModelProperty(value = "是否可以回退")
+	@ApiModelProperty(value = "是否可以回退", example = "String")
 	private java.lang.String can_back;
 	
-	@ApiModelProperty(value = "回退按钮")
+	@ApiModelProperty(value = "回退按钮", example = "String")
 	private java.lang.String back_btn;
 	
-	@ApiModelProperty(value = "分页页码")
+	@ApiModelProperty(value = "分页页码", example = "1")
 	private Integer page_no;
 	
-	@ApiModelProperty(value = "分页步长")
+	@ApiModelProperty(value = "分页步长", example = "20")
 	private Integer page_size;
+	
 	public java.lang.Long getWf_item_id_begin() {
 		return this.wf_item_id_begin;
 	}
