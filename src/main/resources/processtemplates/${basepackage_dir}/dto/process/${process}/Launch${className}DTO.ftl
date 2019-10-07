@@ -19,10 +19,10 @@ import lombok.Data;
 public class Launch${className}DTO {
 	<#list processGM.tables as table>
 	
-	@ApiModelProperty(value = "${table.remarks?default("")}")
+	@ApiModelProperty(value = "${table.remarks?default("暂无表注释")}", example = "${table.remarks?default("暂无表注释")}")
 	private ${table.className}DTO ${table.className?uncap_first}DTO;
 	</#list>
 	
-	@ApiModelProperty(value = "流程启动信息")
+	@ApiModelProperty(value = "流程启动信息", example = "流程启动信息")
 	private LaunchProcessDTO launchProcessDTO;
 }
