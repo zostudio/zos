@@ -42,8 +42,8 @@ spring:
 com:
   zos:
     generate:
-       base-package: com.zos.activiti
-       process: stakeholder
+       base-package: com.aici.ats.manual
+       process: contract
        namespace: pages
        out-uri: F:\qycache
        table-remove-prefixes: bc_
@@ -53,18 +53,24 @@ com:
 #         schema: ZOS
 #         catalog: ZOS
 #         url: jdbc:oracle:thin:@//127.0.0.1:1521/ORCL
-         driver: oracle.jdbc.driver.OracleDriver
-         schema: XINJIANG
-         catalog: XINJIANG
-         username: xinjiang
-         password: xinjiang
-         url: jdbc:oracle:thin:@//10.1.195.102:1521/AIDB
+#         driver: oracle.jdbc.driver.OracleDriver
+#         schema: XINJIANG
+#         catalog: XINJIANG
+#         username: xinjiang
+#         password: xinjiang
+#         url: jdbc:oracle:thin:@//10.1.195.102:1521/AIDB
          #username: root
          #password: 01Studio
          #schema: XINJIANG
          #catalog: XINJIANG
          #url: jdbc:mysql://127.0.0.1:3306/activiti?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
          #driver: com.mysql.jdbc.Driver
+         username: foreign
+         password: foreignDBadmin_15
+         schema: foreign
+         catalog: foreign
+         url: jdbc:mysql://10.19.24.15:22036/foreignDB?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+         driver: com.mysql.jdbc.Driver
        type-mappings: [
          {name: java.sql.Timestamp, value: java.util.Date},
          {name: java.sql.Date, value: java.util.Date},
