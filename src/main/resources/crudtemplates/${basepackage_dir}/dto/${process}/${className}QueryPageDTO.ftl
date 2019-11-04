@@ -45,21 +45,21 @@ public class ${className}QueryPageDTO {
 	<#list table.columns as column>
 	<#if column.isDateTimeColumn>
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(开始)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(开始)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000-01-01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private String ${column.sqlName?lower_case}_begin;
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(结束)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(结束)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000-01-01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private String ${column.sqlName?lower_case}_end;
 	<#elseif column.isNumberColumn>
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(开始)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(开始)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000-01-01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private ${column.javaType} ${column.sqlName?lower_case}_begin;
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(结束)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}(结束)", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000-01-01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private ${column.javaType} ${column.sqlName?lower_case}_end;
 	<#else>
 	
-	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000:01:01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
+	@ApiModelProperty(value = "${column.remarks?default("暂无数据注释[${column_index}]")}", example = <#if column.isStringColumn>"String"<#elseif column.isDateTimeColumn>"2000-01-01 00:00:00"<#elseif column.isNumberColumn>"0"<#else>"0"</#if>)
 	private ${column.javaType} ${column.sqlName?lower_case};
 	</#if>
 	</#list>
