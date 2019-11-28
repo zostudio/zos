@@ -12,12 +12,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableTransactionManagement(mode= AdviceMode.PROXY, proxyTargetClass=true)
-public class ZosApplication {
+public class ZosGenerateApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ZosApplication.class, args);
+		SpringApplication.run(ZosGenerateApplication.class, args);
 //		ConfigurableApplicationContext configurableApplicationContext = new SpringApplicationBuilder()
-//			.sources(ZosApplication.class)
+//			.sources(ZosGenerateApplication.class)
 //			.web(WebApplicationType.SERVLET)
 //			.run(args);
 //		log.info("Init Beans");

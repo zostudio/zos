@@ -11,12 +11,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Slf4j
 @EnableSwagger2
 @SpringBootApplication
-public class ZosApplication {
+public class ZosActivitiApplication {
 
 	public static void main(String[] args) {
-//		SpringApplication.run(ZosApplication.class, args);
+//		SpringApplication.run(ZosGenerateApplication.class, args);
 		ConfigurableApplicationContext configurableApplicationContext = new SpringApplicationBuilder()
-			.sources(ZosApplication.class)
+			.sources(ZosActivitiApplication.class)
 			.web(WebApplicationType.SERVLET)
 			.run(args);
 		log.info("Init Beans");
